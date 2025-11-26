@@ -1,5 +1,9 @@
 type Mode = "signin" | "register";
 
+const API_BASE =
+  (window as unknown as { TANRID_API?: string }).TANRID_API || "http://localhost:4000";
+const TOKEN_KEY = "tanrid_token";
+const USER_KEY = "tanrid_user";
 const toast = document.getElementById("login-toast");
 let toastHandle: number | undefined;
 
@@ -53,16 +57,6 @@ modeButtons.forEach(btn => {
 setMode(currentMode);
 
 const authForm = document.getElementById("auth-form") as HTMLFormElement | null;
-authForm?.addEventListener("submit", event => {
-  event.preventDefault();
-  const formData = new FormData(authForm);
-  const email = formData.get("email");
-  if (currentMode === "register") {
-    showLoginToast(`Account created for ${email}. Check your inbox to verify.`);
-  } else {
-    showLoginToast(`Signed in as ${email}`);
-  }
-});
 
 const googleButton = document.getElementById("google-login");
 googleButton?.addEventListener("click", () => {
@@ -71,6 +65,37 @@ googleButton?.addEventListener("click", () => {
     window.location.href = "https://accounts.google.com/signin";
   }, 800);
 });
+
+type RequestOptions = RequestInit & { auth?: boolean };
+
+const getStoredToken = (): string | null =>
+  localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
+
+const apiRequest = async <T>(path: string, options: RequestOptions = {}): Promise<T> => {
+  const { auth = true, headers, ...rest } = options;
+  const mergedHeaders: HeadersInit = {
+    "Content-Type": "application/json",
+    ...headers,
+  };
+
+  if (auth) {
+    const token = getStoredToken();
+    if (token) {
+      mergedHeaders["Authorization"] = `Bearer ${token}`;
+    }
+  }
+
+  const response = await fetch(`${API_BASE}${path}`, {
+    ...rest,
+    headers: mergedHeaders,
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error((data as { message?: string }).message || "Request failed");
+  }
+  return data as T;
+};
 
 const dialog = document.getElementById("reset-dialog");
 const forgotButton = document.getElementById("forgot-password");
@@ -100,7 +125,52 @@ dialog?.addEventListener("click", event => {
 
 resetForm?.addEventListener("submit", event => {
   event.preventDefault();
-  const email = new FormData(resetForm).get("reset-email");
-  closeDialog();
-  showLoginToast(`Reset instructions sent to ${email}`);
+  const email = new FormData(resetForm).get("reset-email") as string;
+  apiRequest<{ message: string }>("/auth/forgot", {
+    method: "POST",
+    body: JSON.stringify({ email }),
+    auth: false,
+  })
+    .then(response => {
+      closeDialog();
+      showLoginToast(response.message || `Reset instructions sent to ${email}`);
+    })
+    .catch(error => showLoginToast(error.message));
+});
+
+const rememberCheckbox = document.querySelector<HTMLInputElement>('input[name="remember"]');
+
+const persistSession = (token: string, user: unknown): void => {
+  const storage = rememberCheckbox?.checked ? localStorage : sessionStorage;
+  storage.setItem(TOKEN_KEY, token);
+  storage.setItem(USER_KEY, JSON.stringify(user));
+};
+
+authForm?.addEventListener("submit", event => {
+  event.preventDefault();
+  const formData = new FormData(authForm);
+  const payload = {
+    email: formData.get("email"),
+    password: formData.get("password"),
+    name: formData.get("name") || undefined,
+  };
+
+  const endpoint = currentMode === "signin" ? "/auth/login" : "/auth/register";
+  apiRequest<{ user: unknown; token: string }>(endpoint, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    auth: false,
+  })
+    .then(({ user, token }) => {
+      persistSession(token, user);
+      showLoginToast(
+        currentMode === "signin"
+          ? "Signed in successfully."
+          : "Account created. Redirecting to dashboard..."
+      );
+      window.setTimeout(() => {
+        window.location.href = "/";
+      }, 1200);
+    })
+    .catch(error => showLoginToast(error.message));
 });

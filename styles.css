@@ -42,10 +42,30 @@ header {
 }
 
 .logo {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1;
   font-weight: 700;
-  font-size: 1.35rem;
-  letter-spacing: 0.04em;
-  color: var(--accent);
+  background: #fff;
+  padding: 0.25rem 0.9rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(15, 31, 60, 0.08);
+  align-items: center;
+}
+
+.logo-wordmark {
+  font-size: 1.55rem;
+  letter-spacing: 0.01em;
+  color: #2f6ef5;
+}
+
+.logo-subtitle {
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: #a2aeca;
+  font-weight: 500;
+  margin-top: 0.35rem;
+  text-align: center;
 }
 
 nav ul {
