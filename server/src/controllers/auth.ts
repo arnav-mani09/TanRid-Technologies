@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { z } from "zod";
 import { pool } from "../db/pool";
+import { sendWelcomeEmail } from "../utils/email";
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -39,8 +40,16 @@ export const register = async (req: Request, res: Response) => {
     [email, hash, name]
   );
 
-  const token = jwt.sign({ sub: result.rows[0].id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
-  res.status(201).json({ user: result.rows[0], token });
+  const user = result.rows[0];
+
+  try {
+    await sendWelcomeEmail(email);
+  } catch (error) {
+    console.error("Welcome email error:", error);
+  }
+
+  const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+  res.status(201).json({ user, token });
 };
 
 export const login = async (req: Request, res: Response) => {
