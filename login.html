@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TanRid Account</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <main class="login-layout">
+    <section class="form-panel">
+      <div class="brand">
+        <span class="logo-dot"></span>
+        <span class="brand-name">TanRid Access</span>
+      </div>
+      <div class="mode-toggle" role="tablist">
+        <button class="toggle-btn active" data-mode="signin" role="tab" aria-selected="true">Sign in</button>
+        <button class="toggle-btn" data-mode="register" role="tab" aria-selected="false">Create account</button>
+      </div>
+      <h1 id="panel-title">Welcome back</h1>
+      <p class="panel-subtitle" id="panel-subtitle">Enter your details to access tutorials and your workspace.</p>
+      <form class="auth-form" id="auth-form">
+        <label>
+          Email address
+          <input type="email" name="email" placeholder="you@company.com" required />
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" placeholder="Enter your password" required />
+        </label>
+        <label class="remember">
+          <input type="checkbox" name="remember" />
+          <span>Keep me signed in on this device</span>
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn primary" id="primary-action">Continue</button>
+          <button type="button" class="link-button" id="forgot-password">Forgot password?</button>
+        </div>
+      </form>
+      <div class="divider">
+        <span></span>
+        <span>or</span>
+        <span></span>
+      </div>
+      <button class="btn google" id="google-login">
+        <span class="google-icon">G</span>
+        Continue with Google
+      </button>
+      <div class="help-text">
+        Need help? <a href="mailto:support@tanrid.com">Contact the TanRid help desk</a>
+      </div>
+    </section>
+    <section class="visual-panel">
+      <div class="visual-content">
+        <h2>Secure entry</h2>
+        <p>Single sign-on keeps your TanRid tutorials, projects, and teams protected with enterprise-grade encryption.</p>
+        <ul>
+          <li>Multi-factor authentication ready</li>
+          <li>Google Workspace &amp; SSO integrations</li>
+          <li>Automated password recovery</li>
+        </ul>
+      </div>
+      <div class="visual-pattern"></div>
+    </section>
+  </main>
+
+  <div class="toast" id="login-toast" role="status" aria-live="polite"></div>
+
+  <div class="dialog" id="reset-dialog" aria-hidden="true">
+    <div class="dialog-card">
+      <button class="dialog-close" id="close-reset" aria-label="Close reset dialog">&times;</button>
+      <h3>Reset your password</h3>
+      <p>Enter the email address associated with your TanRid account. We'll email you a secure reset link.</p>
+      <form id="reset-form">
+        <label>
+          Email address
+          <input type="email" name="reset-email" placeholder="you@company.com" required />
+        </label>
+        <div class="dialog-actions">
+          <button type="button" class="btn ghost" id="cancel-reset">Cancel</button>
+          <button type="submit" class="btn primary">Send reset link</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>

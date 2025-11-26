@@ -33,8 +33,8 @@
         <h1>Building calm technology for bold businesses.</h1>
         <p>TanRid crafts reliable digital products, simplifying complex workflows so your team can focus on what matters.</p>
         <div class="hero-cta">
-          <button class="btn btn-primary">Start a project</button>
-          <button class="btn btn-secondary">View case studies</button>
+          <button class="btn btn-primary" data-scroll="#contact" data-message="We'd like to start a new project with TanRid.">Start a project</button>
+          <button class="btn btn-secondary" data-scroll="#solutions" data-toast="Showing recent solutions and case studies.">View case studies</button>
         </div>
         <div class="stats">
           <div class="stat-card" data-animate>
@@ -90,37 +90,37 @@
           <div class="service-icon">💡</div>
           <h3>Product Development</h3>
           <p>End-to-end engineering for modern web and mobile platforms built with scalable cloud architectures.</p>
-          <button class="service-link">Learn more</button>
+          <button class="service-link" data-service="Product Development">Learn more</button>
         </article>
         <article class="service-card" data-animate>
           <div class="service-icon">🤖</div>
           <h3>Automation Testing</h3>
           <p>Reusable automation frameworks that boost coverage, speed releases, and flag risks early.</p>
-          <button class="service-link">Learn more</button>
+          <button class="service-link" data-service="Automation Testing">Learn more</button>
         </article>
         <article class="service-card" data-animate>
           <div class="service-icon">🚀</div>
           <h3>Performance Testing</h3>
           <p>Stress, load, and endurance testing paired with tuning plans to keep experiences fast.</p>
-          <button class="service-link">Learn more</button>
+          <button class="service-link" data-service="Performance Testing">Learn more</button>
         </article>
         <article class="service-card" data-animate>
           <div class="service-icon">🧪</div>
           <h3>Manual Testing</h3>
           <p>Detail-oriented QA sprints that validate usability, compliance, and business logic edge cases.</p>
-          <button class="service-link">Learn more</button>
+          <button class="service-link" data-service="Manual Testing">Learn more</button>
         </article>
         <article class="service-card" data-animate>
           <div class="service-icon">📋</div>
           <h3>Test Management</h3>
           <p>Structured plans, traceability matrices, and reporting dashboards for total clarity.</p>
-          <button class="service-link">Learn more</button>
+          <button class="service-link" data-service="Test Management">Learn more</button>
         </article>
         <article class="service-card" data-animate>
           <div class="service-icon">📱</div>
           <h3>Mobile Testing</h3>
           <p>Device labs and automation to guarantee parity across platforms, networks, and OS versions.</p>
-          <button class="service-link">Learn more</button>
+          <button class="service-link" data-service="Mobile Testing">Learn more</button>
         </article>
       </div>
     </section>
@@ -142,8 +142,8 @@
           <li>Cross browser & device labs</li>
         </ul>
         <div class="tutorial-actions">
-          <button class="btn btn-primary">Sign in</button>
-          <button class="btn btn-secondary">Register free</button>
+          <button class="btn btn-primary" data-navigate="login.html?mode=signin">Sign in</button>
+          <button class="btn btn-secondary" data-navigate="login.html?mode=register">Register free</button>
         </div>
       </div>
     </section>
@@ -280,58 +280,82 @@
       </div>
       <div class="job-grid">
         <article class="job-card" data-animate>
-          <h3>Business Analyst</h3>
-          <p>Quantitative background plus the ability to convert insights into clear stakeholder narratives.</p>
-          <ul>
-            <li>Advanced analytical skills</li>
-            <li>Excel/Pivot + data viz expertise</li>
-            <li>Executive-ready presentations</li>
-          </ul>
+          <div class="job-heading">
+            <h3>Business Analyst</h3>
+            <span class="job-type">Full-time · Remote</span>
+          </div>
+          <p class="job-summary">Translate insights into crisp recommendations alongside product and leadership.</p>
+          <div class="job-tags">
+            <span>Storytelling</span>
+            <span>Excel / Sheets</span>
+            <span>Data Viz</span>
+          </div>
+          <button class="btn btn-ghost" data-role="Business Analyst">View role</button>
         </article>
         <article class="job-card" data-animate>
-          <h3>QA Engineer</h3>
-          <p>3+ years of QA ownership with automation chops in Linux/Windows environments.</p>
-          <ul>
-            <li>Selenium or Playwright</li>
-            <li>RESTful API testing</li>
-            <li>Version control fluency</li>
-          </ul>
+          <div class="job-heading">
+            <h3>QA Engineer</h3>
+            <span class="job-type">Hybrid · San Jose</span>
+          </div>
+          <p class="job-summary">Own manual + automated testing pipelines across Linux/Windows environments.</p>
+          <div class="job-tags">
+            <span>Selenium / Playwright</span>
+            <span>REST APIs</span>
+            <span>Git</span>
+          </div>
+          <button class="btn btn-ghost" data-role="QA Engineer">View role</button>
         </article>
         <article class="job-card" data-animate>
-          <h3>Test Automation Engineer</h3>
-          <p>Lead multi-team automation initiatives and keep frameworks healthy as products evolve.</p>
-          <ul>
-            <li>Java or Python proficiency</li>
-            <li>CI/CD integration</li>
-            <li>5+ years experience</li>
-          </ul>
+          <div class="job-heading">
+            <h3>Test Automation Engineer</h3>
+            <span class="job-type">Full-time · Remote</span>
+          </div>
+          <p class="job-summary">Scale frameworks, coach product teams, and keep CI/CD validations humming.</p>
+          <div class="job-tags">
+            <span>Java / Python</span>
+            <span>CI/CD</span>
+            <span>Monitoring</span>
+          </div>
+          <button class="btn btn-ghost" data-role="Test Automation Engineer">View role</button>
         </article>
         <article class="job-card" data-animate>
-          <h3>UI Developer</h3>
-          <p>Modern front-end craftsmanship across design systems, animation, and accessibility.</p>
-          <ul>
-            <li>React or Vue</li>
-            <li>Component libraries</li>
-            <li>6+ years experience</li>
-          </ul>
+          <div class="job-heading">
+            <h3>UI Developer</h3>
+            <span class="job-type">Hybrid · Bay Area</span>
+          </div>
+          <p class="job-summary">Ship polished interfaces, animation systems, and accessible design systems.</p>
+          <div class="job-tags">
+            <span>React / Vue</span>
+            <span>Design tokens</span>
+            <span>WCAG</span>
+          </div>
+          <button class="btn btn-ghost" data-role="UI Developer">View role</button>
         </article>
         <article class="job-card" data-animate>
-          <h3>Java Developer</h3>
-          <p>Build distributed services, orchestrate APIs, and mentor junior engineers.</p>
-          <ul>
-            <li>Spring or Quarkus</li>
-            <li>Business rules engines</li>
-            <li>Decision center management</li>
-          </ul>
+          <div class="job-heading">
+            <h3>Java Developer</h3>
+            <span class="job-type">Full-time · Remote</span>
+          </div>
+          <p class="job-summary">Design APIs, model business rules, and mentor teammates through reviews.</p>
+          <div class="job-tags">
+            <span>Spring / Quarkus</span>
+            <span>Domain design</span>
+            <span>Mentorship</span>
+          </div>
+          <button class="btn btn-ghost" data-role="Java Developer">View role</button>
         </article>
         <article class="job-card" data-animate>
-          <h3>Data Analyst</h3>
-          <p>Partner with product to translate telemetry into experiments and product bets.</p>
-          <ul>
-            <li>SQL + Python</li>
-            <li>Dashboarding (Looker, Tableau)</li>
-            <li>Strong storytelling</li>
-          </ul>
+          <div class="job-heading">
+            <h3>Data Analyst</h3>
+            <span class="job-type">Hybrid · Austin</span>
+          </div>
+          <p class="job-summary">Work with product squads to discover patterns and inform quarterly bets.</p>
+          <div class="job-tags">
+            <span>SQL + Python</span>
+            <span>Looker/Tableau</span>
+            <span>Experimentation</span>
+          </div>
+          <button class="btn btn-ghost" data-role="Data Analyst">View role</button>
         </article>
       </div>
     </section>
@@ -342,8 +366,8 @@
         <h2 class="section-heading light">Get practical playbooks from our team.</h2>
         <p class="section-description light">Monthly notes shipped straight to your inbox—observations on product operations, platform modernization, and leading change responsibly.</p>
         <div class="hero-cta center">
-          <button class="btn btn-white">Subscribe</button>
-          <button class="btn btn-outline-light">Download latest brief</button>
+          <button class="btn btn-white" data-mail-to="insights@tanrid.com" data-mail-subject="Subscribe to TanRid Insights">Subscribe</button>
+          <button class="btn btn-outline-light" data-download="latest-brief">Download latest brief</button>
         </div>
       </div>
     </section>
@@ -397,6 +421,8 @@
     </section>
   </main>
 
+  <div class="toast" id="action-toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
   <div class="cookie-consent" id="cookie-consent" aria-live="polite">
     <div class="cookie-card">
       <div>
@@ -440,66 +466,6 @@
     </div>
   </footer>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    const progressBars = document.querySelectorAll(".progress-fill");
-    const progressObserver = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const fill = entry.target;
-            const value = fill.getAttribute("data-progress");
-            fill.style.width = value + "%";
-            progressObserver.unobserve(fill);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-    progressBars.forEach(bar => progressObserver.observe(bar));
-
-    const animatedElements = document.querySelectorAll("[data-animate]");
-    const animationObserver = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in-view");
-            animationObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-    animatedElements.forEach(el => animationObserver.observe(el));
-
-    const cookieBanner = document.getElementById("cookie-consent");
-    const cookieAccept = document.getElementById("cookie-accept");
-    const cookieManage = document.getElementById("cookie-manage");
-    const cookieDetails = document.getElementById("cookie-details");
-    const COOKIE_KEY = "tanrid-cookie-consent";
-
-    const hideCookieBanner = () => cookieBanner?.classList.remove("visible");
-
-    if (!localStorage.getItem(COOKIE_KEY)) {
-      cookieBanner?.classList.add("visible");
-    }
-
-    cookieAccept?.addEventListener("click", () => {
-      localStorage.setItem(COOKIE_KEY, "accepted");
-      hideCookieBanner();
-    });
-
-    cookieManage?.addEventListener("click", () => {
-      cookieBanner?.classList.toggle("show-details");
-      if (cookieBanner?.classList.contains("show-details")) {
-        cookieManage.textContent = "Hide details";
-        cookieDetails?.setAttribute("aria-hidden", "false");
-      } else {
-        cookieManage.textContent = "Manage preferences";
-        cookieDetails?.setAttribute("aria-hidden", "true");
-      }
-    });
-  </script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>

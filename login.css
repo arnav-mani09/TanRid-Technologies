@@ -1,0 +1,332 @@
+:root {
+  --primary: #1b2c47;
+  --accent: #2d6df6;
+  --muted: #5e6787;
+  --panel: #ffffff;
+  --bg: #f4f7ff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--primary);
+  min-height: 100vh;
+}
+
+.login-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  min-height: 100vh;
+}
+
+.form-panel {
+  background: var(--panel);
+  padding: 3rem clamp(2rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 20px 0 60px rgba(12, 18, 44, 0.06);
+  z-index: 2;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.logo-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2d6df6, #8360ff);
+}
+
+.mode-toggle {
+  display: inline-flex;
+  border: 1px solid rgba(45, 109, 246, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.toggle-btn {
+  border: none;
+  background: transparent;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--muted);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.toggle-btn.active {
+  background: rgba(45, 109, 246, 0.15);
+  color: var(--accent);
+}
+
+.auth-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.auth-form input {
+  border-radius: 12px;
+  border: 1px solid rgba(27, 44, 71, 0.25);
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(45, 109, 246, 0.2);
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.6rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 15px 30px rgba(45, 109, 246, 0.35);
+}
+
+.btn.ghost {
+  border: 1px solid rgba(45, 109, 246, 0.3);
+  background: transparent;
+  color: var(--accent);
+}
+
+.btn.google {
+  width: 100%;
+  border: 1px solid rgba(45, 109, 246, 0.3);
+  background: transparent;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.google-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ea4335, #4285f4);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.divider span:first-child,
+.divider span:last-child {
+  flex: 1;
+  height: 1px;
+  background: rgba(27, 44, 71, 0.1);
+}
+
+.help-text {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.help-text a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.visual-panel {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(140deg, rgba(45, 109, 246, 0.15), rgba(131, 96, 255, 0.12));
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.visual-content {
+  max-width: 360px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 2rem;
+  border-radius: 24px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 25px 45px rgba(12, 20, 38, 0.18);
+  position: relative;
+  z-index: 1;
+}
+
+.visual-content ul {
+  margin-top: 1rem;
+  color: var(--muted);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.visual-content li {
+  list-style: none;
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.visual-content li::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+  position: absolute;
+  top: 0.45rem;
+  left: 0;
+}
+
+.visual-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(45, 109, 246, 0.18) 1px, transparent 0);
+  background-size: 32px 32px;
+  opacity: 0.6;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translate(-50%, 20px);
+  background: #101b30;
+  color: #fff;
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 15px 30px rgba(10, 16, 47, 0.4);
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 16, 33, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 1rem;
+  z-index: 10;
+}
+
+.dialog.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dialog-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  display: grid;
+  gap: 1rem;
+}
+
+.dialog-card input {
+  width: 100%;
+  border: 1px solid rgba(27, 44, 71, 0.2);
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+@media (max-width: 800px) {
+  .visual-panel {
+    display: none;
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "tanrid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arnav-mani09/TanRid-Technologies.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arnav-mani09/TanRid-Technologies/issues"
+  },
+  "homepage": "https://github.com/arnav-mani09/TanRid-Technologies#readme"
+}
