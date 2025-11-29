@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TanRid Workspace</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <header class="dash-header">
+    <div class="logo">
+      <span class="logo-wordmark">TanRid</span>
+      <span class="logo-subtitle">Technologies</span>
+    </div>
+    <nav class="dash-nav">
+      <button class="nav-tab active" data-panel="overview">Overview</button>
+      <button class="nav-tab" data-panel="chatbot">AI Assistant</button>
+      <button class="nav-tab" data-panel="solutions">Solutions</button>
+    </nav>
+    <button id="logout-btn" class="btn ghost">Sign out</button>
+  </header>
+
+  <main>
+    <section id="overview" class="panel active">
+      <h1>Welcome to your TanRid workspace</h1>
+      <p>Here’s a quick glance at what we offer your team.</p>
+      <div class="card-grid">
+        <article class="feature-card">
+          <h3>Product Development</h3>
+          <p>Full lifecycle engineering pods delivering secure, cloud-native products.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Automation Testing</h3>
+          <p>Reusable frameworks, CI/CD integration, and health dashboards.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Advisory Pods</h3>
+          <p>Fractional design, product, and platform leads embedded with your org.</p>
+        </article>
+        <article class="feature-card">
+          <h3>Training & Support</h3>
+          <p>Shadow programs, playbooks, and 24/7 incident response coverage.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="chatbot" class="panel">
+      <div class="chat-container">
+        <div class="chat-header">
+          <h2>TanRid AI Partner</h2>
+          <p>Ask about delivery process, services, or technology decisions.</p>
+        </div>
+        <div id="chat-log" class="chat-log">
+          <div class="chat-message bot">Hi! I’m the TanRid assistant. How can I help?</div>
+        </div>
+        <form id="chat-form" class="chat-form">
+          <input type="text" id="chat-input" placeholder="Ask me anything…" required />
+          <button type="submit" class="btn primary">Send</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="solutions" class="panel">
+      <h2>Solution Catalog</h2>
+      <ul class="solution-list">
+        <li>
+          <strong>Modernization Roadmap</strong>
+          <span>90-day plan covering discovery, architectural runway, and migration toolkit.</span>
+        </li>
+        <li>
+          <strong>Platform Reliability</strong>
+          <span>Observability baseline, SLO modeling, and incident readiness.</span>
+        </li>
+        <li>
+          <strong>Experience Refresh</strong>
+          <span>Design systems, accessibility upgrades, and motion studies.</span>
+        </li>
+        <li>
+          <strong>Automation Boost</strong>
+          <span>Unified test strategy, lab orchestration, and ops reporting.</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <div class="toast" id="dash-toast"></div>
+  <script>window.TANRID_API = "http://localhost:4000";</script>
+  <script src="dashboard.js" type="module"></script>
+</body>
+</html>

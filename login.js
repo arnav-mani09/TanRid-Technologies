@@ -140,7 +140,7 @@ authForm?.addEventListener("submit", event => {
           : "Account created. Redirecting to dashboard..."
       );
       window.setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/dashboard.html";
       }, 1200);
     })
     .catch(error => showLoginToast(error.message));

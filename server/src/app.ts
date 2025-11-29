@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth";
+import assistantRouter from "./routes/assistant";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(
 app.use(express.json());
 app.get("/", (_req, res) => res.json({ status: "TanRid API running" }));
 app.use("/auth", authRouter);
+app.use("/assistant", assistantRouter);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
