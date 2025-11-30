@@ -27,6 +27,41 @@ if (!token) {
   window.location.href = "/login.html?mode=signin";
 }
 
+const planSelectors = document.querySelectorAll("[data-select-plan]");
+const solutionsPanel = document.getElementById("solutions");
+const overlay = document.getElementById("paywall-overlay");
+
+const getPlan = () => localStorage.getItem("tanrid_plan") || "free";
+const setPlan = plan => {
+  localStorage.setItem("tanrid_plan", plan);
+  updatePaywall();
+  showToast(`Plan updated to ${plan.toUpperCase()}`);
+};
+
+const updatePaywall = () => {
+  const currentPlan = getPlan();
+  const locked = currentPlan === "free";
+  solutionsPanel?.classList.toggle("locked", locked);
+  overlay?.classList.toggle("visible", locked);
+};
+
+planSelectors.forEach(button => {
+  button.addEventListener("click", () => {
+    const plan = button.getAttribute("data-select-plan");
+    if (!plan) return;
+    if (plan === "pro") {
+      setPlan("pro");
+    } else if (plan === "enterprise") {
+      showToast("Our team will reach out to customize your plan.");
+    } else {
+      setPlan("free");
+    }
+  });
+});
+
+document.querySelector("[data-upgrade]")?.addEventListener("click", () => setPlan("pro"));
+updatePaywall();
+
 document.getElementById("logout-btn")?.addEventListener("click", () => {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);

@@ -16,6 +16,7 @@
       <button class="nav-tab active" data-panel="overview">Overview</button>
       <button class="nav-tab" data-panel="chatbot">AI Assistant</button>
       <button class="nav-tab" data-panel="solutions">Solutions</button>
+      <button class="nav-tab" data-panel="billing">Billing</button>
     </nav>
     <button id="logout-btn" class="btn ghost">Sign out</button>
   </header>
@@ -61,6 +62,13 @@
     </section>
 
     <section id="solutions" class="panel">
+      <div class="paywall-overlay" id="paywall-overlay">
+        <div>
+          <h3>Unlock premium solutions</h3>
+          <p>Upgrade to TanRid Pro to access curated playbooks, live office hours, and executive briefings.</p>
+          <button class="btn primary" data-upgrade>Upgrade now</button>
+        </div>
+      </div>
       <h2>Solution Catalog</h2>
       <ul class="solution-list">
         <li>
@@ -80,6 +88,42 @@
           <span>Unified test strategy, lab orchestration, and ops reporting.</span>
         </li>
       </ul>
+    </section>
+
+    <section id="billing" class="panel">
+      <div class="plan-grid">
+        <article class="plan-card" data-plan="free">
+          <span class="plan-label">Starter</span>
+          <h3>Free</h3>
+          <ul>
+            <li>Community TanBot access</li>
+            <li>Monthly release notes</li>
+            <li>Email support (48h)</li>
+          </ul>
+          <button class="btn ghost" data-select-plan="free">Stay on Free</button>
+        </article>
+        <article class="plan-card highlight" data-plan="pro">
+          <span class="plan-label">Recommended</span>
+          <h3>TanRid Pro</h3>
+          <p class="price">$79<span>/mo</span></p>
+          <ul>
+            <li>Unlimited TanBot chats</li>
+            <li>Solution playbooks</li>
+            <li>Live office hours</li>
+          </ul>
+          <button class="btn primary" data-select-plan="pro">Unlock Pro</button>
+        </article>
+        <article class="plan-card" data-plan="enterprise">
+          <span class="plan-label">Enterprise</span>
+          <h3>Custom</h3>
+          <ul>
+            <li>Embedded pods</li>
+            <li>Compliance reviews</li>
+            <li>24/7 on-call support</li>
+          </ul>
+          <button class="btn ghost" data-select-plan="enterprise">Contact sales</button>
+        </article>
+      </div>
     </section>
   </main>
 

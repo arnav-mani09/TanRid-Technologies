@@ -398,6 +398,29 @@ main {
   margin-top: 1.5rem;
 }
 
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.video-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 1rem 1rem 1.5rem;
+  box-shadow: 0 25px 35px rgba(13, 31, 60, 0.08);
+  display: grid;
+  gap: 0.8rem;
+}
+
+.video-card video {
+  width: 100%;
+  border-radius: 14px;
+  height: 180px;
+  object-fit: cover;
+  background: #000;
+}
+
 .hero-note {
   position: relative;
   z-index: 1;
