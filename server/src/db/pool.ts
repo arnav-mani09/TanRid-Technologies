@@ -1,15 +1,13 @@
 import { Pool } from "pg";
 import dotenv from "dotenv";
-
 dotenv.config();
 
-const needsSSL =
-  process.env.FORCE_DB_SSL === "true" ||
-  process.env.NODE_ENV === "production" ||
-  !(process.env.DATABASE_URL ?? "").includes("localhost");
-
+// Always enable SSL for Supabase/Render, but skip cert validation
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: needsSSL ? { rejectUnauthorized: false } : undefined,
+  ssl: {
+    rejectUnauthorized: false, // <-- REQUIRED on Render + Supabase
+  }
 });
+
 export default pool;
