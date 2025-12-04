@@ -1,4 +1,9 @@
 const API_BASE = (window.TANRID_API) || "http://localhost:4000";
+const warmBackend = () => {
+  fetch(`${API_BASE}/`, { method: "GET", mode: "cors" }).catch(() => {});
+};
+warmBackend();
+window.setTimeout(warmBackend, 5000);
 const TOKEN_KEY = "tanrid_token";
 const USER_KEY = "tanrid_user";
 const toast = document.getElementById("login-toast");
@@ -18,6 +23,8 @@ const modeButtons = document.querySelectorAll(".toggle-btn");
 const panelTitle = document.getElementById("panel-title");
 const panelSubtitle = document.getElementById("panel-subtitle");
 const primaryAction = document.getElementById("primary-action");
+const confirmPasswordWrapper = document.getElementById("confirm-password-wrapper");
+const confirmPasswordInput = document.querySelector('input[name="confirm-password"]');
 const setMode = mode => {
   currentMode = mode;
   modeButtons.forEach(btn => {
@@ -36,6 +43,12 @@ const setMode = mode => {
   }
   if (primaryAction) {
     primaryAction.textContent = mode === "signin" ? "Sign in" : "Create account";
+  }
+  if (confirmPasswordWrapper && confirmPasswordInput) {
+    const registering = mode === "register";
+    confirmPasswordWrapper.hidden = !registering;
+    confirmPasswordInput.required = registering;
+    confirmPasswordInput.value = "";
   }
 };
 modeButtons.forEach(btn => {
@@ -126,6 +139,13 @@ authForm?.addEventListener("submit", event => {
     password: formData.get("password"),
     name: formData.get("name") || undefined,
   };
+  if (currentMode === "register") {
+    const confirmPassword = formData.get("confirm-password");
+    if (payload.password !== confirmPassword) {
+      showLoginToast("Passwords do not match.");
+      return;
+    }
+  }
   const endpoint = currentMode === "signin" ? "/auth/login" : "/auth/register";
   apiRequest(endpoint, {
     method: "POST",
