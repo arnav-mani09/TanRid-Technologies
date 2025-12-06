@@ -9,11 +9,23 @@ import videoRouter from "./routes/videos";
 dotenv.config();
 
 const app = express();
-const allowedOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5500";
+const allowedOrigins = (
+  process.env.CLIENT_ORIGINS ||
+  process.env.CLIENT_ORIGIN ||
+  "http://localhost:5500"
+)
+  .split(",")
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
-    origin: allowedOrigin,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
