@@ -43,6 +43,30 @@
           <p>Shadow programs, playbooks, and 24/7 incident response coverage.</p>
         </article>
       </div>
+      <div class="video-library">
+        <div class="video-upload-card" id="video-upload-section" hidden>
+          <h3>Instructor Uploads</h3>
+          <p>Share a new module with the community.</p>
+          <form id="video-upload-form">
+            <label>
+              Title
+              <input type="text" name="video-title" placeholder="Automation Playbook" required />
+            </label>
+            <label>
+              Caption
+              <textarea name="video-caption" rows="2" placeholder="Describe what’s inside..."></textarea>
+            </label>
+            <label class="file-picker">
+              Video file
+              <input type="file" id="video-file" accept="video/*" required />
+            </label>
+            <button type="submit" class="btn primary">Publish module</button>
+          </form>
+        </div>
+        <div class="video-gallery" id="video-grid">
+          <p class="empty-state" id="video-empty">Videos will appear here once published.</p>
+        </div>
+      </div>
     </section>
 
     <section id="chatbot" class="panel">
@@ -131,6 +155,7 @@
   <script>
     window.TANRID_API = "https://tanrid-technologies.onrender.com";
   </script>
+
   <script src="dashboard.js" type="module"></script>
 </body>
 </html>

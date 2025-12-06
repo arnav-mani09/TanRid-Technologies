@@ -48,7 +48,8 @@ export const register = async (req: Request, res: Response) => {
     console.error("Welcome email error:", error);
   }
 
-  const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+  const tokenPayload = { sub: user.id, email: user.email };
+  const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!, { expiresIn: "1h" });
   res.status(201).json({ user, token });
 };
 
@@ -69,7 +70,8 @@ export const login = async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  const token = jwt.sign({ sub: user.rows[0].id }, process.env.JWT_SECRET!, { expiresIn: "1h" });
+  const tokenPayload = { sub: user.rows[0].id, email: user.rows[0].email };
+  const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!, { expiresIn: "1h" });
   res.json({ user: { id: user.rows[0].id, email: user.rows[0].email, name: user.rows[0].name }, token });
 };
 

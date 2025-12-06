@@ -1,4 +1,4 @@
-const API_BASE = window.TANRID_API || "http://localhost:4000";
+const API_BASE = window.TANRID_API || "https://tanrid-technologies.onrender.com";
 const TOKEN_KEY = "tanrid_token";
 const USER_KEY = "tanrid_user";
 
@@ -26,6 +26,17 @@ const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KE
 if (!token) {
   window.location.href = "/login.html?mode=signin";
 }
+const storedUser =
+  localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
+let currentUser = null;
+try {
+  currentUser = storedUser ? JSON.parse(storedUser) : null;
+} catch (error) {
+  currentUser = null;
+}
+const instructorEmail = "test@tanrid.com";
+const isInstructor =
+  (currentUser?.email || "").toLowerCase() === instructorEmail.toLowerCase();
 
 const planSelectors = document.querySelectorAll("[data-select-plan]");
 const solutionsPanel = document.getElementById("solutions");
@@ -108,3 +119,101 @@ chatForm?.addEventListener("submit", event => {
   chatInput.value = "";
   sendChat(value);
 });
+
+const videoUploadSection = document.getElementById("video-upload-section");
+const videoUploadForm = document.getElementById("video-upload-form");
+const videoFileInput = document.getElementById("video-file");
+const videoGrid = document.getElementById("video-grid");
+const videoEmpty = document.getElementById("video-empty");
+
+if (videoUploadSection) {
+  videoUploadSection.hidden = !isInstructor;
+}
+
+const renderVideos = videos => {
+  if (!videoGrid || !videoEmpty) return;
+  videoGrid.innerHTML = "";
+  if (!videos.length) {
+    videoEmpty.hidden = false;
+    videoGrid.appendChild(videoEmpty);
+    return;
+  }
+  videoEmpty.hidden = true;
+  videos.forEach(video => {
+    const card = document.createElement("article");
+    card.className = "video-card";
+    card.innerHTML = `
+      <video controls preload="metadata" src="${video.videoUrl}"></video>
+      <h4>${video.title}</h4>
+      ${video.caption ? `<p>${video.caption}</p>` : ""}
+      <span class="meta">Uploaded ${new Date(video.createdAt).toLocaleString()}</span>
+    `;
+    videoGrid.appendChild(card);
+  });
+};
+
+const loadVideos = async () => {
+  if (!videoGrid || !videoEmpty) return;
+  try {
+    const response = await fetch(`${API_BASE}/videos`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) throw new Error("Unable to load modules.");
+    const videos = await response.json();
+    renderVideos(videos);
+  } catch (error) {
+    videoEmpty.textContent = error.message || "Unable to load modules.";
+    videoEmpty.hidden = false;
+  }
+};
+
+const readFileAsDataUrl = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+
+videoUploadForm?.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!videoFileInput?.files?.length) {
+    showToast("Select a video to upload.");
+    return;
+  }
+  const submitBtn = videoUploadForm.querySelector("button[type='submit']");
+  submitBtn?.setAttribute("disabled", "true");
+  try {
+    const formData = new FormData(videoUploadForm);
+    const file = videoFileInput.files[0];
+    const videoData = await readFileAsDataUrl(file);
+    const payload = {
+      title: formData.get("video-title"),
+      caption: formData.get("video-caption"),
+      videoData,
+    };
+    const response = await fetch(`${API_BASE}/videos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || "Upload failed.");
+    }
+    showToast("Module published.");
+    videoUploadForm.reset();
+    loadVideos();
+  } catch (error) {
+    showToast(error.message || "Upload failed.");
+  } finally {
+    submitBtn?.removeAttribute("disabled");
+  }
+});
+
+loadVideos();
