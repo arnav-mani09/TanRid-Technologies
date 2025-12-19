@@ -38,7 +38,7 @@ body {
   font-weight: 700;
   background: #fff;
   padding: 0.15rem 0.9rem;
-  border-radius: 16px;
+  border-radius: 0;
   box-shadow: 0 10px 25px rgba(15, 31, 60, 0.08);
 }
 
@@ -62,7 +62,7 @@ body {
   border: none;
   background: transparent;
   padding: 0.6rem 1rem;
-  border-radius: 999px;
+  border-radius: 0;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
@@ -76,7 +76,7 @@ body {
 
 .btn {
   border: none;
-  border-radius: 999px;
+  border-radius: 0;
   padding: 0.65rem 1.5rem;
   font-weight: 600;
   cursor: pointer;
@@ -120,7 +120,7 @@ main {
 .feature-card {
   background: #fff;
   padding: 1.5rem;
-  border-radius: 18px;
+  border-radius: 0;
   box-shadow: 0 20px 35px rgba(13, 31, 64, 0.08);
 }
 
@@ -133,7 +133,7 @@ main {
 .video-upload-card {
   background: #fff;
   padding: 1.5rem;
-  border-radius: 18px;
+  border-radius: 0;
   box-shadow: 0 15px 30px rgba(13, 31, 60, 0.08);
   display: grid;
   gap: 0.85rem;
@@ -153,7 +153,7 @@ main {
 
 .video-upload-card input,
 .video-upload-card textarea {
-  border-radius: 12px;
+  border-radius: 0;
   border: 1px solid rgba(27, 44, 71, 0.15);
   padding: 0.7rem 0.9rem;
   font-size: 0.95rem;
@@ -168,7 +168,7 @@ main {
 
 .video-card {
   background: #fff;
-  border-radius: 20px;
+  border-radius: 0;
   padding: 1rem;
   box-shadow: 0 20px 35px rgba(13, 31, 64, 0.08);
   display: grid;
@@ -177,7 +177,7 @@ main {
 
 .video-card video {
   width: 100%;
-  border-radius: 16px;
+  border-radius: 0;
   background: #000;
 }
 
@@ -199,12 +199,12 @@ main {
   color: var(--muted);
   padding: 2rem;
   border: 1px dashed rgba(27, 44, 71, 0.2);
-  border-radius: 16px;
+  border-radius: 0;
 }
 
 .chat-container {
   background: #fff;
-  border-radius: 20px;
+  border-radius: 0;
   box-shadow: 0 30px 50px rgba(13, 31, 64, 0.12);
   overflow: hidden;
 }
@@ -224,7 +224,7 @@ main {
 
 .chat-message {
   padding: 0.9rem 1rem;
-  border-radius: 14px;
+  border-radius: 0;
   background: rgba(47, 110, 245, 0.08);
 }
 
@@ -243,7 +243,7 @@ main {
 
 .chat-form input {
   flex: 1;
-  border-radius: 12px;
+  border-radius: 0;
   border: 1px solid rgba(27, 44, 71, 0.2);
   padding: 0.85rem 1rem;
   font-size: 1rem;
@@ -259,7 +259,7 @@ main {
 .solution-list li {
   background: #fff;
   padding: 1.25rem;
-  border-radius: 16px;
+  border-radius: 0;
   box-shadow: 0 20px 30px rgba(15, 31, 60, 0.08);
   display: grid;
   gap: 0.3rem;
@@ -273,7 +273,7 @@ main {
   justify-content: center;
   background: rgba(16, 27, 48, 0.85);
   color: #fff;
-  border-radius: 20px;
+  border-radius: 0;
   text-align: center;
   padding: 2rem;
   z-index: 5;
@@ -291,7 +291,7 @@ main {
 
 .plan-card {
   background: #fff;
-  border-radius: 18px;
+  border-radius: 0;
   padding: 1.5rem;
   box-shadow: 0 25px 35px rgba(13, 31, 60, 0.08);
   display: grid;
@@ -330,7 +330,7 @@ main {
   background: #101b30;
   color: #fff;
   padding: 0.8rem 1.4rem;
-  border-radius: 999px;
+  border-radius: 0;
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
