@@ -1,9 +1,9 @@
 :root {
-  --primary: #1b2c47;
-  --accent: #2d6df6;
+  --primary: #152447;
+  --accent: #152447;
   --text: #1c2135;
   --muted: #5e6787;
-  --bg: linear-gradient(120deg, #eef2fb 0%, #f8fbff 100%);
+  --bg: #ffffff;
   --card: #ffffff;
 }
 
@@ -135,29 +135,50 @@ main {
   align-items: center;
   gap: 3rem;
   padding-top: 5rem;
-  background: linear-gradient(145deg, rgba(45, 109, 246, 0.08), rgba(255, 255, 255, 0.6));
+  background: #fff;
   border-radius: 0;
   box-shadow: 0 25px 60px rgba(27, 44, 71, 0.08);
   position: relative;
   overflow: hidden;
-  animation: heroGlow 14s ease-in-out infinite alternate;
+  animation: none;
 }
 
 .hero::after {
-  content: "";
-  position: absolute;
-  width: 60%;
-  height: 120%;
-  top: -10%;
-  right: -20%;
-  background: radial-gradient(circle, rgba(45, 109, 246, 0.25), transparent 60%);
-  filter: blur(40px);
-  pointer-events: none;
+  content: none;
 }
 
 .hero-content {
   position: relative;
   z-index: 1;
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image {
+  position: relative;
+  width: min(420px, 100%);
+  overflow: hidden;
+  background: #152447;
+  box-shadow: 0 18px 40px rgba(21, 36, 71, 0.2);
+}
+
+.hero-image img {
+  width: 100%;
+  display: block;
+  filter: saturate(0.95) contrast(1.02);
+}
+
+.hero-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(21, 36, 71, 0.2);
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
 .hero h1 {
