@@ -293,7 +293,7 @@ main {
   border: 1px solid rgba(84, 104, 151, 0.1);
   box-shadow: 0 25px 35px rgba(15, 31, 60, 0.08);
   overflow: hidden;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background-color 0.35s ease, color 0.35s ease;
 }
 
 .service-card::before {
@@ -301,8 +301,8 @@ main {
   position: absolute;
   inset: 0;
   border-radius: 0;
-  border-top: 4px solid transparent;
-  background: linear-gradient(90deg, rgba(45, 109, 246, 0.3), rgba(136, 96, 255, 0.3));
+  border-top: 4px solid var(--primary);
+  background: transparent;
   opacity: 0;
   transition: opacity 0.4s ease;
   z-index: 0;
@@ -310,6 +310,8 @@ main {
 
 .service-card:hover {
   transform: translateY(-8px);
+  background: var(--primary);
+  color: #fff;
   box-shadow: 0 35px 55px rgba(10, 18, 46, 0.2);
 }
 
@@ -322,6 +324,16 @@ main {
   z-index: 1;
 }
 
+.service-card:hover h3,
+.service-card:hover p,
+.service-card:hover .service-link {
+  color: #fff;
+}
+
+.service-card:hover .service-link::after {
+  color: #fff;
+}
+
 .service-icon {
   width: 56px;
   height: 56px;
@@ -332,6 +344,10 @@ main {
   justify-content: center;
   font-size: 1.35rem;
   margin-bottom: 1.5rem;
+}
+
+.service-card:hover .service-icon {
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .service-link {
@@ -350,6 +366,7 @@ main {
 .service-link::after {
   content: "→";
   font-size: 1rem;
+  color: currentColor;
   transition: transform 0.2s ease;
 }
 
@@ -836,8 +853,8 @@ main {
 }
 
 footer {
-  background: #0c1f20;
-  color: #cdd5d6;
+  background: #152447;
+  color: #e7ecf5;
   padding: 2rem;
 }
 
