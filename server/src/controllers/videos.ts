@@ -29,21 +29,24 @@ const ensureTable = () => {
   return tableReady;
 };
 
-const mapVideoRow = (row: any) => ({
+const mapVideoRow = (row: any, baseUrl = "") => ({
   id: row.id,
   title: row.title,
   caption: row.caption,
   uploadedBy: row.uploaded_by,
   createdAt: row.created_at,
-  videoUrl: `/media/${row.file_path}`,
+  videoUrl: `${baseUrl}/media/${row.file_path}`,
 });
 
-export const listVideos = async (_req: Request, res: Response) => {
+const getBaseUrl = (req: Request) => `${req.protocol}://${req.get("host")}`;
+
+export const listVideos = async (req: Request, res: Response) => {
   await ensureTable();
   const { rows } = await pool.query(
     "SELECT id,title,caption,file_path,uploaded_by,created_at FROM videos ORDER BY created_at DESC"
   );
-  res.json(rows.map(mapVideoRow));
+  const baseUrl = getBaseUrl(req);
+  res.json(rows.map(row => mapVideoRow(row, baseUrl)));
 };
 
 const parseDataUri = (dataUri: string) => {
@@ -100,9 +103,46 @@ export const uploadVideo = async (req: Request, res: Response) => {
       [title, caption, relativePath, mime, userEmail]
     );
 
-    res.status(201).json(mapVideoRow(rows[0]));
+    res.status(201).json(mapVideoRow(rows[0], getBaseUrl(req)));
   } catch (error) {
     console.error("Video upload failed", error);
     res.status(500).json({ message: "Unable to save video." });
+  }
+};
+
+export const deleteVideo = async (req: Request, res: Response) => {
+  await ensureTable();
+  const payload = (req as any).user || {};
+  let userEmail = (payload.email || "") as string;
+  if (!userEmail) {
+    userEmail = await lookupEmail(payload.sub);
+  }
+  userEmail = userEmail?.toLowerCase();
+  if (userEmail !== INSTRUCTOR_EMAIL.toLowerCase()) {
+    return res.status(403).json({ message: "Only the TanRid instructor can delete videos." });
+  }
+
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: "Video id is required." });
+  }
+
+  try {
+    const { rows } = await pool.query(
+      "SELECT file_path FROM videos WHERE id=$1",
+      [id]
+    );
+    const filePath = rows[0]?.file_path as string | undefined;
+    await pool.query("DELETE FROM videos WHERE id=$1", [id]);
+    if (filePath) {
+      const target = path.join(uploadRoot, filePath);
+      if (fs.existsSync(target)) {
+        fs.unlinkSync(target);
+      }
+    }
+    res.json({ ok: true });
+  } catch (error) {
+    console.error("Video delete failed", error);
+    res.status(500).json({ message: "Unable to delete video." });
   }
 };

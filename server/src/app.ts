@@ -9,6 +9,7 @@ import videoRouter from "./routes/videos";
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", true);
 const allowedOrigins = (
   process.env.CLIENT_ORIGINS ||
   process.env.CLIENT_ORIGIN ||

@@ -194,6 +194,23 @@ main {
   color: var(--muted);
 }
 
+.delete-video {
+  justify-self: start;
+  border: 1px solid rgba(21, 36, 71, 0.3);
+  background: transparent;
+  color: var(--primary);
+  padding: 0.45rem 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.delete-video:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
 .empty-state {
   text-align: center;
   color: var(--muted);

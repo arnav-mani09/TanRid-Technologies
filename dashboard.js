@@ -130,6 +130,9 @@ if (videoUploadSection) {
   videoUploadSection.hidden = !isInstructor;
 }
 
+const resolveVideoUrl = url =>
+  url && url.startsWith("http") ? url : `${API_BASE}${url || ""}`;
+
 const renderVideos = videos => {
   if (!videoGrid || !videoEmpty) return;
   videoGrid.innerHTML = "";
@@ -142,11 +145,15 @@ const renderVideos = videos => {
   videos.forEach(video => {
     const card = document.createElement("article");
     card.className = "video-card";
+    const deleteButton = isInstructor
+      ? `<button class="delete-video" type="button" data-video-id="${video.id}">Delete</button>`
+      : "";
     card.innerHTML = `
-      <video controls preload="metadata" src="${video.videoUrl}"></video>
+      <video controls preload="metadata" src="${resolveVideoUrl(video.videoUrl)}"></video>
       <h4>${video.title}</h4>
       ${video.caption ? `<p>${video.caption}</p>` : ""}
       <span class="meta">Uploaded ${new Date(video.createdAt).toLocaleString()}</span>
+      ${deleteButton}
     `;
     videoGrid.appendChild(card);
   });
@@ -168,6 +175,32 @@ const loadVideos = async () => {
     videoEmpty.hidden = false;
   }
 };
+
+videoGrid?.addEventListener("click", async event => {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) return;
+  const deleteButton = target.closest(".delete-video");
+  if (!deleteButton) return;
+  const videoId = deleteButton.getAttribute("data-video-id");
+  if (!videoId) return;
+  if (!confirm("Delete this video? This cannot be undone.")) return;
+  try {
+    const response = await fetch(`${API_BASE}/videos/${videoId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || "Unable to delete video.");
+    }
+    showToast("Video deleted.");
+    loadVideos();
+  } catch (error) {
+    showToast(error.message || "Unable to delete video.");
+  }
+});
 
 const readFileAsDataUrl = file =>
   new Promise((resolve, reject) => {
