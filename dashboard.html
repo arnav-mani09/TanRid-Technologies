@@ -60,6 +60,10 @@
               Video file
               <input type="file" id="video-file" accept="video/*" required />
             </label>
+            <div class="video-preview" id="video-preview" hidden>
+              <video id="video-preview-player" controls preload="metadata"></video>
+              <p class="preview-note">Preview of the selected file.</p>
+            </div>
             <button type="submit" class="btn primary">Publish module</button>
           </form>
         </div>
@@ -153,7 +157,13 @@
 
   <div class="toast" id="dash-toast"></div>
   <script>
-    window.TANRID_API = "https://tanrid-technologies.onrender.com";
+    const isLocal =
+      window.location.hostname === "127.0.0.1" ||
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "[::]";
+    window.TANRID_API = isLocal
+      ? "http://127.0.0.1:4000"
+      : "https://tanrid-technologies.onrender.com";
   </script>
 
   <script src="dashboard.js" type="module"></script>

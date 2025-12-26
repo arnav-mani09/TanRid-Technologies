@@ -19,10 +19,20 @@ const allowedOrigins = (
   .map(origin => origin.trim())
   .filter(Boolean);
 
+const defaultLocalOrigins = [
+  "http://127.0.0.1:5500",
+  "http://127.0.0.1:5501",
+  "http://localhost:5500",
+  "http://localhost:5501",
+  "http://[::]:5500",
+  "http://[::]:5501",
+];
+const allowedOriginSet = new Set([...allowedOrigins, ...defaultLocalOrigins]);
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOriginSet.has(origin)) {
         return callback(null, true);
       }
       return callback(new Error("Not allowed by CORS"));
@@ -33,7 +43,8 @@ app.use(
 
 app.use(express.json({ limit: "200mb" }));
 app.use(express.urlencoded({ extended: true, limit: "200mb" }));
-app.use("/media", express.static(path.join(__dirname, "..", "uploads")));
+const uploadsDir = path.join(process.cwd(), "uploads");
+app.use("/media", express.static(uploadsDir));
 app.get("/", (_req, res) => res.json({ status: "TanRid API running" }));
 app.use("/auth", authRouter);
 app.use("/assistant", assistantRouter);

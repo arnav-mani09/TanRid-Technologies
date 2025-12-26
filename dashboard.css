@@ -161,6 +161,23 @@ main {
   color: var(--primary);
 }
 
+.video-preview {
+  border: 1px dashed rgba(27, 44, 71, 0.2);
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.video-preview video {
+  width: 100%;
+  background: #0d1320;
+}
+
+.preview-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
 .video-gallery {
   display: grid;
   gap: 1.25rem;

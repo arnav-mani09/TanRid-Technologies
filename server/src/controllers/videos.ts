@@ -3,7 +3,7 @@ import { pool } from "../db/pool";
 import fs from "fs";
 import path from "path";
 
-const uploadRoot = path.join(__dirname, "..", "uploads");
+const uploadRoot = path.join(process.cwd(), "uploads");
 const videoDir = path.join(uploadRoot, "videos");
 fs.mkdirSync(videoDir, { recursive: true });
 

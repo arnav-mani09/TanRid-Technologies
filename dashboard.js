@@ -125,6 +125,9 @@ const videoUploadForm = document.getElementById("video-upload-form");
 const videoFileInput = document.getElementById("video-file");
 const videoGrid = document.getElementById("video-grid");
 const videoEmpty = document.getElementById("video-empty");
+const videoPreview = document.getElementById("video-preview");
+const videoPreviewPlayer = document.getElementById("video-preview-player");
+let previewUrl = "";
 
 if (videoUploadSection) {
   videoUploadSection.hidden = !isInstructor;
@@ -210,6 +213,34 @@ const readFileAsDataUrl = file =>
     reader.readAsDataURL(file);
   });
 
+const clearPreview = () => {
+  if (previewUrl) {
+    URL.revokeObjectURL(previewUrl);
+    previewUrl = "";
+  }
+  if (videoPreviewPlayer instanceof HTMLVideoElement) {
+    videoPreviewPlayer.removeAttribute("src");
+    videoPreviewPlayer.load();
+  }
+  if (videoPreview) {
+    videoPreview.hidden = true;
+  }
+};
+
+videoFileInput?.addEventListener("change", () => {
+  const file = videoFileInput.files?.[0];
+  if (!file || !(videoPreviewPlayer instanceof HTMLVideoElement)) {
+    clearPreview();
+    return;
+  }
+  clearPreview();
+  previewUrl = URL.createObjectURL(file);
+  videoPreviewPlayer.src = previewUrl;
+  if (videoPreview) {
+    videoPreview.hidden = false;
+  }
+});
+
 videoUploadForm?.addEventListener("submit", async event => {
   event.preventDefault();
   if (!videoFileInput?.files?.length) {
@@ -217,10 +248,17 @@ videoUploadForm?.addEventListener("submit", async event => {
     return;
   }
   const submitBtn = videoUploadForm.querySelector("button[type='submit']");
+  const originalLabel = submitBtn?.textContent || "";
+  if (submitBtn) {
+    submitBtn.textContent = "Uploading...";
+  }
   submitBtn?.setAttribute("disabled", "true");
   try {
     const formData = new FormData(videoUploadForm);
     const file = videoFileInput.files[0];
+    if (file.size > 80 * 1024 * 1024) {
+      showToast("Large file detected. Upload may take a while.");
+    }
     const videoData = await readFileAsDataUrl(file);
     const payload = {
       title: formData.get("video-title"),
@@ -241,10 +279,14 @@ videoUploadForm?.addEventListener("submit", async event => {
     }
     showToast("Module published.");
     videoUploadForm.reset();
+    clearPreview();
     loadVideos();
   } catch (error) {
     showToast(error.message || "Upload failed.");
   } finally {
+    if (submitBtn) {
+      submitBtn.textContent = originalLabel || "Publish module";
+    }
     submitBtn?.removeAttribute("disabled");
   }
 });
