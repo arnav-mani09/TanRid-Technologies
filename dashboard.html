@@ -15,7 +15,6 @@
     <nav class="dash-nav">
       <button class="nav-tab active" data-panel="overview">Overview</button>
       <button class="nav-tab" data-panel="chatbot">AI Assistant</button>
-      <button class="nav-tab" data-panel="solutions">Solutions</button>
       <button class="nav-tab" data-panel="billing">Billing</button>
     </nav>
     <button id="logout-btn" class="btn ghost">Sign out</button>
@@ -23,26 +22,74 @@
 
   <main>
     <section id="overview" class="panel active">
-      <h1>Welcome to your TanRid workspace</h1>
-      <p>Here’s a quick glance at what we offer your team.</p>
-      <div class="card-grid">
-        <article class="feature-card">
-          <h3>Product Development</h3>
-          <p>Full lifecycle engineering pods delivering secure, cloud-native products.</p>
+      <div class="overview-hero">
+        <div>
+          <h1>Your learning dashboard</h1>
+          <p>Track progress, pick up new courses, and keep your team aligned.</p>
+          <div class="stats-row">
+            <div class="stat-card">
+              <span class="stat-number">4</span>
+              <span class="stat-label">Active courses</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number">72%</span>
+              <span class="stat-label">Weekly progress</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number">12</span>
+              <span class="stat-label">Saved modules</span>
+            </div>
+          </div>
+        </div>
+        <div class="course-feature">
+          <span class="pill">Recommended</span>
+          <h3>Calm delivery systems</h3>
+          <p>Start the TanRid roadmap to align teams, reduce risk, and ship confidently.</p>
+          <button class="btn ghost">Continue course</button>
+        </div>
+      </div>
+
+      <div class="section-heading">
+        <h2>Your courses</h2>
+        <p>Resume what you’re working on and stay on track.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <h3>Automation Playbook</h3>
+          <p>Reusable testing frameworks for stable releases.</p>
+          <span class="course-meta">42% complete</span>
         </article>
-        <article class="feature-card">
-          <h3>Automation Testing</h3>
-          <p>Reusable frameworks, CI/CD integration, and health dashboards.</p>
+        <article class="course-card">
+          <h3>Platform Reliability</h3>
+          <p>SLIs, SLOs, and response strategy for scale.</p>
+          <span class="course-meta">In progress</span>
         </article>
-        <article class="feature-card">
-          <h3>Advisory Pods</h3>
-          <p>Fractional design, product, and platform leads embedded with your org.</p>
-        </article>
-        <article class="feature-card">
-          <h3>Training & Support</h3>
-          <p>Shadow programs, playbooks, and 24/7 incident response coverage.</p>
+        <article class="course-card">
+          <h3>Product Leadership</h3>
+          <p>Decision frameworks for cross-functional teams.</p>
+          <span class="course-meta">Saved for later</span>
         </article>
       </div>
+
+      <div class="section-heading">
+        <h2>Explore courses</h2>
+        <p>Find new training paths curated for TanRid clients.</p>
+      </div>
+      <div class="explore-grid">
+        <article class="explore-card">
+          <h4>Mobile QA Mastery</h4>
+          <p>Device labs, automation, and release strategy.</p>
+        </article>
+        <article class="explore-card">
+          <h4>AI Quality Ops</h4>
+          <p>Guardrails, evaluation, and test automation.</p>
+        </article>
+        <article class="explore-card">
+          <h4>Performance Readiness</h4>
+          <p>Load testing, tuning plans, and health dashboards.</p>
+        </article>
+      </div>
+
       <div class="video-library">
         <div class="video-upload-card" id="video-upload-section" hidden>
           <h3>Instructor Uploads</h3>
@@ -67,6 +114,10 @@
             <button type="submit" class="btn primary">Publish module</button>
           </form>
         </div>
+        <div class="instructor-note" id="instructor-note">
+          <h3>Instructor uploads</h3>
+          <p>Course publishing is managed by TanRid instructors. Reach out if you need access.</p>
+        </div>
         <div class="video-gallery" id="video-grid">
           <p class="empty-state" id="video-empty">Videos will appear here once published.</p>
         </div>
@@ -87,35 +138,6 @@
           <button type="submit" class="btn primary">Send</button>
         </form>
       </div>
-    </section>
-
-    <section id="solutions" class="panel">
-      <div class="paywall-overlay" id="paywall-overlay">
-        <div>
-          <h3>Unlock premium solutions</h3>
-          <p>Upgrade to TanRid Pro to access playbooks, live office hours, and executive briefings.</p>
-          <button class="btn primary" data-upgrade>Upgrade now</button>
-        </div>
-      </div>
-      <h2>Solution Catalog</h2>
-      <ul class="solution-list">
-        <li>
-          <strong>Modernization Roadmap</strong>
-          <span>90-day plan covering discovery, architectural runway, and migration toolkit.</span>
-        </li>
-        <li>
-          <strong>Platform Reliability</strong>
-          <span>Observability baseline, SLO modeling, and incident readiness.</span>
-        </li>
-        <li>
-          <strong>Experience Refresh</strong>
-          <span>Design systems, accessibility upgrades, and motion studies.</span>
-        </li>
-        <li>
-          <strong>Automation Boost</strong>
-          <span>Unified test strategy, lab orchestration, and ops reporting.</span>
-        </li>
-      </ul>
     </section>
 
     <section id="billing" class="panel">

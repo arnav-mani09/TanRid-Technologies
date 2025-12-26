@@ -38,6 +38,16 @@ const instructorEmail = "test@tanrid.com";
 const isInstructor =
   (currentUser?.email || "").toLowerCase() === instructorEmail.toLowerCase();
 
+const handleUnauthorized = response => {
+  if (response.status !== 401) return false;
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(USER_KEY);
+  window.location.href = "/login.html?mode=signin";
+  return true;
+};
+
 const planSelectors = document.querySelectorAll("[data-select-plan]");
 const solutionsPanel = document.getElementById("solutions");
 const overlay = document.getElementById("paywall-overlay");
@@ -104,6 +114,7 @@ const sendChat = async message => {
       },
       body: JSON.stringify({ message }),
     });
+    if (handleUnauthorized(response)) return;
     if (!response.ok) throw new Error("Assistant unavailable.");
     const data = await response.json();
     appendMessage(data.reply || "I’m here to help with anything else.");
@@ -121,6 +132,7 @@ chatForm?.addEventListener("submit", event => {
 });
 
 const videoUploadSection = document.getElementById("video-upload-section");
+const instructorNote = document.getElementById("instructor-note");
 const videoUploadForm = document.getElementById("video-upload-form");
 const videoFileInput = document.getElementById("video-file");
 const videoGrid = document.getElementById("video-grid");
@@ -131,6 +143,9 @@ let previewUrl = "";
 
 if (videoUploadSection) {
   videoUploadSection.hidden = !isInstructor;
+}
+if (instructorNote) {
+  instructorNote.hidden = isInstructor;
 }
 
 const resolveVideoUrl = url =>
@@ -170,6 +185,7 @@ const loadVideos = async () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    if (handleUnauthorized(response)) return;
     if (!response.ok) throw new Error("Unable to load modules.");
     const videos = await response.json();
     renderVideos(videos);
@@ -194,6 +210,7 @@ videoGrid?.addEventListener("click", async event => {
         Authorization: `Bearer ${token}`,
       },
     });
+    if (handleUnauthorized(response)) return;
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       throw new Error(error.message || "Unable to delete video.");
@@ -273,6 +290,7 @@ videoUploadForm?.addEventListener("submit", async event => {
       },
       body: JSON.stringify(payload),
     });
+    if (handleUnauthorized(response)) return;
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       throw new Error(error.message || "Upload failed.");
