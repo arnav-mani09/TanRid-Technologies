@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { z } from "zod";
-import { pool } from "../db/pool";
 import { sendWelcomeEmail } from "../utils/email";
+import { createUser, findUserByEmail, findUserById, readUsers, updateUser } from "../utils/userStore";
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -27,20 +27,22 @@ export const register = async (req: Request, res: Response) => {
   if (!parsed.success) {
     return res.status(400).json(parsed.error.flatten());
   }
-  const { email, password, name } = parsed.data;
+  const email = parsed.data.email.trim().toLowerCase();
+  const { password, name } = parsed.data;
 
-  const existing = await pool.query("SELECT id FROM users WHERE email=$1", [email]);
-  if (existing.rowCount) {
+  const existing = await findUserByEmail(email);
+  if (existing) {
     return res.status(409).json({ message: "Email already in use" });
   }
 
   const hash = await bcrypt.hash(password, 12);
-  const result = await pool.query(
-    "INSERT INTO users (email, password_hash, name) VALUES ($1,$2,$3) RETURNING id,email,name",
-    [email, hash, name]
-  );
-
-  const user = result.rows[0];
+  const user = await createUser({
+    id: crypto.randomUUID(),
+    email,
+    password_hash: hash,
+    created_at: new Date().toISOString(),
+    ...(name !== undefined ? { name } : {}),
+  });
 
   try {
     await sendWelcomeEmail(email);
@@ -50,7 +52,7 @@ export const register = async (req: Request, res: Response) => {
 
   const tokenPayload = { sub: user.id, email: user.email };
   const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!, { expiresIn: "1h" });
-  res.status(201).json({ user, token });
+  res.status(201).json({ user: { id: user.id, email: user.email, name: user.name }, token });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -58,34 +60,35 @@ export const login = async (req: Request, res: Response) => {
   if (!parsed.success) {
     return res.status(400).json(parsed.error.flatten());
   }
-  const { email, password } = parsed.data;
+  const email = parsed.data.email.trim().toLowerCase();
+  const { password } = parsed.data;
 
-  const user = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
-  if (!user.rowCount) {
+  const user = await findUserByEmail(email);
+  if (!user) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  const valid = await bcrypt.compare(password, user.rows[0].password_hash);
+  const valid = await bcrypt.compare(password, user.password_hash);
   if (!valid) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  const tokenPayload = { sub: user.rows[0].id, email: user.rows[0].email };
+  const tokenPayload = { sub: user.id, email: user.email };
   const token = jwt.sign(tokenPayload, process.env.JWT_SECRET!, { expiresIn: "1h" });
-  res.json({ user: { id: user.rows[0].id, email: user.rows[0].email, name: user.rows[0].name }, token });
+  res.json({ user: { id: user.id, email: user.email, name: user.name }, token });
 };
 
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email required" });
+  const normalized = String(email).trim().toLowerCase();
 
   const token = crypto.randomBytes(32).toString("hex");
-  const expires = new Date(Date.now() + 15 * 60 * 1000);
-
-  await pool.query(
-    "UPDATE users SET reset_token=$1, reset_token_expires=$2 WHERE email=$3",
-    [token, expires, email]
-  );
+  const expires = Date.now() + 15 * 60 * 1000;
+  const user = await findUserByEmail(normalized);
+  if (user) {
+    await updateUser(user.id, { reset_token: token, reset_token_expires: expires });
+  }
 
   console.log(`Password reset link: https://tanrid.com/reset?token=${token}`);
   res.json({ message: "If that email exists, reset instructions were sent." });
@@ -98,17 +101,14 @@ export const resetPassword = async (req: Request, res: Response) => {
   }
   const { token, password } = parsed.data;
 
-  const user = await pool.query(
-    "SELECT id FROM users WHERE reset_token=$1 AND reset_token_expires > now()",
-    [token]
+  const allUsers = await readUsers();
+  const user = allUsers.find(
+    entry => entry.reset_token === token && (entry.reset_token_expires ?? 0) > Date.now()
   );
-  if (!user.rowCount) return res.status(400).json({ message: "Invalid or expired token" });
+  if (!user) return res.status(400).json({ message: "Invalid or expired token" });
 
   const hash = await bcrypt.hash(password, 12);
-  await pool.query(
-    "UPDATE users SET password_hash=$1, reset_token=NULL, reset_token_expires=NULL WHERE id=$2",
-    [hash, user.rows[0].id]
-  );
+  await updateUser(user.id, { password_hash: hash, reset_token: null, reset_token_expires: null });
 
   res.json({ message: "Password updated" });
 };
@@ -116,7 +116,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const getCurrentUser = async (req: Request, res: Response) => {
   const userId = (req as any).user?.sub;
   if (!userId) return res.sendStatus(401);
-  const user = await pool.query("SELECT id,email,name FROM users WHERE id=$1", [userId]);
-  if (!user.rowCount) return res.sendStatus(404);
-  res.json(user.rows[0]);
+  const user = await findUserById(userId);
+  if (!user) return res.sendStatus(404);
+  res.json({ id: user.id, email: user.email, name: user.name });
 };

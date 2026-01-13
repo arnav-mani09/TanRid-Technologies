@@ -1,4 +1,5 @@
-const API_BASE = window.TANRID_API || "https://tanrid-technologies.onrender.com";
+const isLocal = ["127.0.0.1", "localhost", "[::]"].includes(window.location.hostname);
+const API_BASE = window.TANRID_API || (isLocal ? "http://127.0.0.1:4000" : "https://tanrid-technologies.onrender.com");
 const warmBackend = () => {
   fetch(`${API_BASE}/`, { method: "GET", mode: "cors" }).catch(() => {});
 };

@@ -1,33 +1,20 @@
 import { Request, Response } from "express";
-import { pool } from "../db/pool";
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
+import { findUserById } from "../utils/userStore";
+import {
+  addVideoRecord,
+  deleteVideoRecord,
+  findVideoRecord,
+  listVideoRecords,
+} from "../utils/videoStore";
 
 const uploadRoot = path.join(process.cwd(), "uploads");
 const videoDir = path.join(uploadRoot, "videos");
 fs.mkdirSync(videoDir, { recursive: true });
 
 const INSTRUCTOR_EMAIL = "test@tanrid.com";
-
-let tableReady: Promise<void> | null = null;
-const ensureTable = () => {
-  if (!tableReady) {
-    tableReady = pool
-      .query(`
-        CREATE TABLE IF NOT EXISTS videos (
-          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-          title TEXT NOT NULL,
-          caption TEXT,
-          file_path TEXT NOT NULL,
-          mime_type TEXT NOT NULL,
-          uploaded_by TEXT NOT NULL,
-          created_at TIMESTAMPTZ DEFAULT now()
-        )
-      `)
-      .then(() => undefined);
-  }
-  return tableReady;
-};
 
 const mapVideoRow = (row: any, baseUrl = "") => ({
   id: row.id,
@@ -41,10 +28,7 @@ const mapVideoRow = (row: any, baseUrl = "") => ({
 const getBaseUrl = (req: Request) => `${req.protocol}://${req.get("host")}`;
 
 export const listVideos = async (req: Request, res: Response) => {
-  await ensureTable();
-  const { rows } = await pool.query(
-    "SELECT id,title,caption,file_path,uploaded_by,created_at FROM videos ORDER BY created_at DESC"
-  );
+  const rows = await listVideoRecords();
   const baseUrl = getBaseUrl(req);
   res.json(rows.map(row => mapVideoRow(row, baseUrl)));
 };
@@ -62,12 +46,11 @@ const parseDataUri = (dataUri: string) => {
 
 const lookupEmail = async (userId: string | undefined) => {
   if (!userId) return "";
-  const { rows } = await pool.query("SELECT email FROM users WHERE id=$1", [userId]);
-  return rows[0]?.email || "";
+  const user = await findUserById(userId);
+  return user?.email || "";
 };
 
 export const uploadVideo = async (req: Request, res: Response) => {
-  await ensureTable();
   const payload = (req as any).user || {};
   let userEmail = (payload.email || "") as string;
   if (!userEmail) {
@@ -98,12 +81,17 @@ export const uploadVideo = async (req: Request, res: Response) => {
     const destination = path.join(uploadRoot, relativePath);
     fs.writeFileSync(destination, buffer);
 
-    const { rows } = await pool.query(
-      "INSERT INTO videos (title, caption, file_path, mime_type, uploaded_by) VALUES ($1,$2,$3,$4,$5) RETURNING id,title,caption,file_path,uploaded_by,created_at",
-      [title, caption, relativePath, mime, userEmail]
-    );
+    const record = await addVideoRecord({
+      id: crypto.randomUUID(),
+      title,
+      caption,
+      file_path: relativePath,
+      mime_type: mime,
+      uploaded_by: userEmail,
+      created_at: new Date().toISOString(),
+    });
 
-    res.status(201).json(mapVideoRow(rows[0], getBaseUrl(req)));
+    res.status(201).json(mapVideoRow(record, getBaseUrl(req)));
   } catch (error) {
     console.error("Video upload failed", error);
     res.status(500).json({ message: "Unable to save video." });
@@ -111,7 +99,6 @@ export const uploadVideo = async (req: Request, res: Response) => {
 };
 
 export const deleteVideo = async (req: Request, res: Response) => {
-  await ensureTable();
   const payload = (req as any).user || {};
   let userEmail = (payload.email || "") as string;
   if (!userEmail) {
@@ -128,19 +115,16 @@ export const deleteVideo = async (req: Request, res: Response) => {
   }
 
   try {
-    const { rows } = await pool.query(
-      "SELECT file_path FROM videos WHERE id=$1",
-      [id]
-    );
-    const filePath = rows[0]?.file_path as string | undefined;
-    await pool.query("DELETE FROM videos WHERE id=$1", [id]);
+    const record = await findVideoRecord(id);
+    const removed = await deleteVideoRecord(id);
+    const filePath = record?.file_path;
     if (filePath) {
       const target = path.join(uploadRoot, filePath);
       if (fs.existsSync(target)) {
         fs.unlinkSync(target);
       }
     }
-    res.json({ ok: true });
+    res.json({ ok: Boolean(removed) });
   } catch (error) {
     console.error("Video delete failed", error);
     res.status(500).json({ message: "Unable to delete video." });
