@@ -32,6 +32,9 @@ const allowedOriginSet = new Set([...allowedOrigins, ...defaultLocalOrigins]);
 app.use(
   cors({
     origin: (origin, callback) => {
+      if (origin && origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
       if (!origin || allowedOriginSet.has(origin)) {
         return callback(null, true);
       }
