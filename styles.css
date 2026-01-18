@@ -35,10 +35,17 @@ header {
 .nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   max-width: 1100px;
   margin: 0 auto;
   padding: 1rem 2rem;
+  gap: 2rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .logo {
@@ -75,6 +82,10 @@ nav ul {
   font-size: 0.95rem;
 }
 
+nav {
+  margin: 0 auto;
+}
+
 nav a {
   text-decoration: none;
   color: var(--text);
@@ -102,6 +113,39 @@ nav a::after {
 nav a:hover::after {
   transform: scaleX(1);
 }
+
+.nav-login {
+  text-decoration: none;
+  padding: 0 18px;
+  border: 0;
+  background: var(--primary);
+  color: #fff;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  height: 40px;
+  min-width: 96px;
+  overflow: hidden;
+}
+
+.nav-login:hover {
+  opacity: 0.9;
+}
+
+.nav-login:visited,
+.nav-login:active {
+  text-decoration: none;
+}
+
+.nav-login,
+.nav-login * {
+  text-decoration: none;
+}
+
 
 main {
   flex: 1;
@@ -923,6 +967,11 @@ footer a {
 
 @media (max-width: 600px) {
   .nav {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .nav-links {
     flex-direction: column;
     gap: 0.8rem;
   }

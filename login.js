@@ -158,11 +158,9 @@ authForm?.addEventListener("submit", event => {
       showLoginToast(
         currentMode === "signin"
           ? "Signed in successfully."
-          : "Account created. Redirecting to dashboard..."
+          : "Account created. Redirecting..."
       );
-      window.setTimeout(() => {
-        window.location.href = "/dashboard.html";
-      }, 1200);
+      window.location.href = "/dashboard.html";
     })
     .catch(error => showLoginToast(error.message));
 });

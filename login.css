@@ -35,6 +35,13 @@ body {
   z-index: 2;
 }
 
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .brand {
   text-decoration: none;
   display: inline-flex;
@@ -62,6 +69,23 @@ body {
   font-weight: 500;
   margin-top: 0.35rem;
   text-align: center;
+}
+
+.header-login {
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(27, 44, 71, 0.2);
+  color: var(--primary);
+  font-weight: 600;
+  border-radius: 0;
+  background: #fff;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.header-login:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
 }
 
 .mode-toggle {

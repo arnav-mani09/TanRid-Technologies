@@ -15,6 +15,7 @@ const videoDir = path.join(uploadRoot, "videos");
 fs.mkdirSync(videoDir, { recursive: true });
 
 const INSTRUCTOR_EMAIL = "test@tanrid.com";
+const MAX_VIDEO_BYTES = 150 * 1024 * 1024;
 
 const mapVideoRow = (row: any, baseUrl = "") => ({
   id: row.id,
@@ -73,6 +74,9 @@ export const uploadVideo = async (req: Request, res: Response) => {
     const { mime, buffer } = parseDataUri(videoData);
     if (!mime) {
       throw new Error("Invalid video mime type.");
+    }
+    if (buffer.length > MAX_VIDEO_BYTES) {
+      return res.status(413).json({ message: "Video too large. Max size is 150MB." });
     }
     const safeTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "video";
     const extension = mime.split("/")[1] || "mp4";

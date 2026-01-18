@@ -44,8 +44,8 @@ app.use(
   })
 );
 
-app.use(express.json({ limit: "200mb" }));
-app.use(express.urlencoded({ extended: true, limit: "200mb" }));
+app.use(express.json({ limit: "600mb" }));
+app.use(express.urlencoded({ extended: true, limit: "600mb" }));
 const uploadsDir = path.join(process.cwd(), "uploads");
 app.use("/media", express.static(uploadsDir));
 app.get("/", (_req, res) => res.json({ status: "TanRid API running" }));

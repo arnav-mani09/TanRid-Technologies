@@ -140,6 +140,7 @@ const videoEmpty = document.getElementById("video-empty");
 const videoPreview = document.getElementById("video-preview");
 const videoPreviewPlayer = document.getElementById("video-preview-player");
 let previewUrl = "";
+const MAX_VIDEO_MB = 150;
 
 if (videoUploadSection) {
   videoUploadSection.hidden = !isInstructor;
@@ -273,6 +274,10 @@ videoUploadForm?.addEventListener("submit", async event => {
   try {
     const formData = new FormData(videoUploadForm);
     const file = videoFileInput.files[0];
+    if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
+      showToast(`Video too large. Max size is ${MAX_VIDEO_MB}MB.`);
+      return;
+    }
     if (file.size > 80 * 1024 * 1024) {
       showToast("Large file detected. Upload may take a while.");
     }
@@ -291,6 +296,9 @@ videoUploadForm?.addEventListener("submit", async event => {
       body: JSON.stringify(payload),
     });
     if (handleUnauthorized(response)) return;
+    if (response.status === 413) {
+      throw new Error(`Video too large. Max size is ${MAX_VIDEO_MB}MB.`);
+    }
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
       throw new Error(error.message || "Upload failed.");
