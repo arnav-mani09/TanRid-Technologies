@@ -29,6 +29,8 @@ const defaultLocalOrigins = [
   "http://[::]:5500",
   "http://[::]:5501",
   "http://[::]:5173",
+  "https://tanrid.com",
+  "https://www.tanrid.com",
 ];
 const allowedOriginSet = new Set([...allowedOrigins, ...defaultLocalOrigins]);
 
