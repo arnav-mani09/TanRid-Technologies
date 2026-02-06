@@ -214,6 +214,42 @@ main {
   gap: 1.5rem;
 }
 
+.section-block {
+  display: grid;
+  gap: 1rem;
+}
+
+.library-section {
+  background: #f8faff;
+  border: 1px solid rgba(21, 36, 71, 0.08);
+  padding: 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.library-header,
+.template-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.library-header h3,
+.template-header h3 {
+  margin: 0;
+}
+
+.library-header p,
+.template-header p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+.upload-toggle {
+  margin-left: auto;
+}
+
 .video-upload-card {
   background: #fff;
   padding: 1.5rem;
@@ -328,6 +364,40 @@ main {
   padding: 2rem;
   border: 1px dashed rgba(27, 44, 71, 0.2);
   border-radius: 0;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.template-card {
+  background: #fff;
+  border: 1px solid rgba(21, 36, 71, 0.08);
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.template-card h4 {
+  margin: 0;
+}
+
+.template-note {
+  color: var(--muted);
+  margin: 0;
+}
+
+.template-tag {
+  justify-self: start;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  border: 1px solid rgba(21, 36, 71, 0.2);
+  padding: 0.2rem 0.55rem;
 }
 
 .chat-container {

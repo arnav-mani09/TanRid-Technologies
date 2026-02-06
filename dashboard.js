@@ -14,7 +14,7 @@ const tabs = document.querySelectorAll(".nav-tab");
 const panels = document.querySelectorAll(".panel");
 tabs.forEach(tab => {
   tab.addEventListener("click", () => {
-    tabs.forEach(t => t.classList.remove("active"));
+    tabs.forEach(item => item.classList.remove("active"));
     tab.classList.add("active");
     panels.forEach(panel => {
       panel.classList.toggle("active", panel.id === tab.dataset.panel);
@@ -26,14 +26,15 @@ const token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KE
 if (!token) {
   window.location.href = "/login.html?mode=signin";
 }
-const storedUser =
-  localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
+
+const storedUser = localStorage.getItem(USER_KEY) || sessionStorage.getItem(USER_KEY);
 let currentUser = null;
 try {
   currentUser = storedUser ? JSON.parse(storedUser) : null;
 } catch (error) {
   currentUser = null;
 }
+
 const instructorEmail = "test@tanrid.com";
 const isInstructor =
   (currentUser?.email || "").toLowerCase() === instructorEmail.toLowerCase();
@@ -48,41 +49,6 @@ const handleUnauthorized = response => {
   return true;
 };
 
-const planSelectors = document.querySelectorAll("[data-select-plan]");
-const solutionsPanel = document.getElementById("solutions");
-const overlay = document.getElementById("paywall-overlay");
-
-const getPlan = () => localStorage.getItem("tanrid_plan") || "free";
-const setPlan = plan => {
-  localStorage.setItem("tanrid_plan", plan);
-  updatePaywall();
-  showToast(`Plan updated to ${plan.toUpperCase()}`);
-};
-
-const updatePaywall = () => {
-  const currentPlan = getPlan();
-  const locked = currentPlan === "free";
-  solutionsPanel?.classList.toggle("locked", locked);
-  overlay?.classList.toggle("visible", locked);
-};
-
-planSelectors.forEach(button => {
-  button.addEventListener("click", () => {
-    const plan = button.getAttribute("data-select-plan");
-    if (!plan) return;
-    if (plan === "pro") {
-      setPlan("pro");
-    } else if (plan === "enterprise") {
-      showToast("Our team will reach out to customize your plan.");
-    } else {
-      setPlan("free");
-    }
-  });
-});
-
-document.querySelector("[data-upgrade]")?.addEventListener("click", () => setPlan("pro"));
-updatePaywall();
-
 document.getElementById("logout-btn")?.addEventListener("click", () => {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
@@ -96,11 +62,12 @@ const chatForm = document.getElementById("chat-form");
 const chatInput = document.getElementById("chat-input");
 
 const appendMessage = (text, role = "bot") => {
+  if (!chatLog) return;
   const div = document.createElement("div");
   div.className = `chat-message ${role}`;
   div.textContent = text;
-  chatLog?.appendChild(div);
-  chatLog?.scrollTo({ top: chatLog.scrollHeight, behavior: "smooth" });
+  chatLog.appendChild(div);
+  chatLog.scrollTo({ top: chatLog.scrollHeight, behavior: "smooth" });
 };
 
 const sendChat = async message => {
@@ -131,36 +98,98 @@ chatForm?.addEventListener("submit", event => {
   sendChat(value);
 });
 
-const videoUploadSection = document.getElementById("video-upload-section");
-const instructorNote = document.getElementById("instructor-note");
-const videoUploadForm = document.getElementById("video-upload-form");
-const videoFileInput = document.getElementById("video-file");
-const videoGrid = document.getElementById("video-grid");
-const videoEmpty = document.getElementById("video-empty");
-const videoPreview = document.getElementById("video-preview");
-const videoPreviewPlayer = document.getElementById("video-preview-player");
-let previewUrl = "";
 const MAX_VIDEO_MB = 150;
+const uploadToggles = document.querySelectorAll(".upload-toggle");
+const instructorNote = document.getElementById("instructor-note");
 
-if (videoUploadSection) {
-  videoUploadSection.hidden = !isInstructor;
-}
+const categorySections = {
+  educational: {
+    section: document.getElementById("edu-upload-section"),
+    form: document.getElementById("edu-upload-form"),
+    fileInput: document.getElementById("edu-video-file"),
+    preview: document.getElementById("edu-video-preview"),
+    previewPlayer: document.getElementById("edu-video-preview-player"),
+    grid: document.getElementById("edu-video-grid"),
+    empty: document.getElementById("edu-video-empty"),
+  },
+  workshop: {
+    section: document.getElementById("workshop-upload-section"),
+    form: document.getElementById("workshop-upload-form"),
+    fileInput: document.getElementById("workshop-video-file"),
+    preview: document.getElementById("workshop-video-preview"),
+    previewPlayer: document.getElementById("workshop-video-preview-player"),
+    grid: document.getElementById("workshop-video-grid"),
+    empty: document.getElementById("workshop-video-empty"),
+  },
+};
+
+Object.values(categorySections).forEach(section => {
+  if (section.section) {
+    section.section.hidden = !isInstructor;
+  }
+});
+
 if (instructorNote) {
   instructorNote.hidden = isInstructor;
 }
 
+uploadToggles.forEach(button => {
+  button.toggleAttribute("disabled", !isInstructor);
+  button.addEventListener("click", () => {
+    const targetId = button.getAttribute("data-target");
+    if (!targetId) return;
+    const target = document.getElementById(targetId);
+    if (!target) return;
+    target.hidden = !target.hidden;
+  });
+});
+
 const resolveVideoUrl = url =>
   url && url.startsWith("http") ? url : `${API_BASE}${url || ""}`;
 
-const renderVideos = videos => {
-  if (!videoGrid || !videoEmpty) return;
-  videoGrid.innerHTML = "";
+const clearPreview = section => {
+  if (section.previewPlayer instanceof HTMLVideoElement) {
+    section.previewPlayer.removeAttribute("src");
+    section.previewPlayer.load();
+  }
+  if (section.preview) {
+    section.preview.hidden = true;
+  }
+};
+
+const initPreview = section => {
+  if (!section.fileInput || !section.previewPlayer) return;
+  section.fileInput.addEventListener("change", () => {
+    const file = section.fileInput.files?.[0];
+    if (!file || !(section.previewPlayer instanceof HTMLVideoElement)) {
+      clearPreview(section);
+      return;
+    }
+    clearPreview(section);
+    const previewUrl = URL.createObjectURL(file);
+    section.previewPlayer.src = previewUrl;
+    if (section.preview) {
+      section.preview.hidden = false;
+    }
+    section.previewPlayer.addEventListener(
+      "loadeddata",
+      () => URL.revokeObjectURL(previewUrl),
+      { once: true }
+    );
+  });
+};
+
+Object.values(categorySections).forEach(initPreview);
+
+const renderVideos = (videos, section, label) => {
+  if (!section.grid || !section.empty) return;
+  section.grid.innerHTML = "";
   if (!videos.length) {
-    videoEmpty.hidden = false;
-    videoGrid.appendChild(videoEmpty);
+    section.empty.hidden = false;
+    section.grid.appendChild(section.empty);
     return;
   }
-  videoEmpty.hidden = true;
+  section.empty.hidden = true;
   videos.forEach(video => {
     const card = document.createElement("article");
     card.className = "video-card";
@@ -171,15 +200,14 @@ const renderVideos = videos => {
       <video controls preload="metadata" src="${resolveVideoUrl(video.videoUrl)}"></video>
       <h4>${video.title}</h4>
       ${video.caption ? `<p>${video.caption}</p>` : ""}
-      <span class="meta">Uploaded ${new Date(video.createdAt).toLocaleString()}</span>
+      <span class="meta">${label} · ${new Date(video.createdAt).toLocaleString()}</span>
       ${deleteButton}
     `;
-    videoGrid.appendChild(card);
+    section.grid.appendChild(card);
   });
 };
 
 const loadVideos = async () => {
-  if (!videoGrid || !videoEmpty) return;
   try {
     const response = await fetch(`${API_BASE}/videos`, {
       headers: {
@@ -187,21 +215,27 @@ const loadVideos = async () => {
       },
     });
     if (handleUnauthorized(response)) return;
-    if (!response.ok) throw new Error("Unable to load modules.");
+    if (!response.ok) throw new Error("Unable to load videos.");
     const videos = await response.json();
-    renderVideos(videos);
+    const educational = videos.filter(video => video.category === "educational");
+    const workshops = videos.filter(video => video.category === "workshop");
+    renderVideos(educational, categorySections.educational, "Educational");
+    renderVideos(workshops, categorySections.workshop, "Workshop");
   } catch (error) {
-    videoEmpty.textContent = error.message || "Unable to load modules.";
-    videoEmpty.hidden = false;
+    Object.values(categorySections).forEach(section => {
+      if (!section.empty) return;
+      section.empty.textContent = error.message || "Unable to load videos.";
+      section.empty.hidden = false;
+    });
   }
 };
 
-videoGrid?.addEventListener("click", async event => {
+const handleDelete = async event => {
   const target = event.target;
   if (!(target instanceof HTMLElement)) return;
-  const deleteButton = target.closest(".delete-video");
-  if (!deleteButton) return;
-  const videoId = deleteButton.getAttribute("data-video-id");
+  const button = target.closest(".delete-video");
+  if (!button) return;
+  const videoId = button.getAttribute("data-video-id");
   if (!videoId) return;
   if (!confirm("Delete this video? This cannot be undone.")) return;
   try {
@@ -221,6 +255,10 @@ videoGrid?.addEventListener("click", async event => {
   } catch (error) {
     showToast(error.message || "Unable to delete video.");
   }
+};
+
+Object.values(categorySections).forEach(section => {
+  section.grid?.addEventListener("click", handleDelete);
 });
 
 const readFileAsDataUrl = file =>
@@ -231,49 +269,21 @@ const readFileAsDataUrl = file =>
     reader.readAsDataURL(file);
   });
 
-const clearPreview = () => {
-  if (previewUrl) {
-    URL.revokeObjectURL(previewUrl);
-    previewUrl = "";
-  }
-  if (videoPreviewPlayer instanceof HTMLVideoElement) {
-    videoPreviewPlayer.removeAttribute("src");
-    videoPreviewPlayer.load();
-  }
-  if (videoPreview) {
-    videoPreview.hidden = true;
-  }
-};
-
-videoFileInput?.addEventListener("change", () => {
-  const file = videoFileInput.files?.[0];
-  if (!file || !(videoPreviewPlayer instanceof HTMLVideoElement)) {
-    clearPreview();
-    return;
-  }
-  clearPreview();
-  previewUrl = URL.createObjectURL(file);
-  videoPreviewPlayer.src = previewUrl;
-  if (videoPreview) {
-    videoPreview.hidden = false;
-  }
-});
-
-videoUploadForm?.addEventListener("submit", async event => {
+const handleUpload = (section, category) => async event => {
   event.preventDefault();
-  if (!videoFileInput?.files?.length) {
+  if (!section.fileInput?.files?.length) {
     showToast("Select a video to upload.");
     return;
   }
-  const submitBtn = videoUploadForm.querySelector("button[type='submit']");
+  const submitBtn = section.form?.querySelector("button[type='submit']");
   const originalLabel = submitBtn?.textContent || "";
   if (submitBtn) {
     submitBtn.textContent = "Uploading...";
   }
   submitBtn?.setAttribute("disabled", "true");
   try {
-    const formData = new FormData(videoUploadForm);
-    const file = videoFileInput.files[0];
+    const formData = new FormData(section.form);
+    const file = section.fileInput.files[0];
     if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
       showToast(`Video too large. Max size is ${MAX_VIDEO_MB}MB.`);
       return;
@@ -286,6 +296,7 @@ videoUploadForm?.addEventListener("submit", async event => {
       title: formData.get("video-title"),
       caption: formData.get("video-caption"),
       videoData,
+      category,
     };
     const response = await fetch(`${API_BASE}/videos`, {
       method: "POST",
@@ -304,8 +315,8 @@ videoUploadForm?.addEventListener("submit", async event => {
       throw new Error(error.message || "Upload failed.");
     }
     showToast("Module published.");
-    videoUploadForm.reset();
-    clearPreview();
+    section.form?.reset();
+    clearPreview(section);
     loadVideos();
   } catch (error) {
     showToast(error.message || "Upload failed.");
@@ -315,6 +326,20 @@ videoUploadForm?.addEventListener("submit", async event => {
     }
     submitBtn?.removeAttribute("disabled");
   }
-});
+};
+
+if (categorySections.educational.form) {
+  categorySections.educational.form.addEventListener(
+    "submit",
+    handleUpload(categorySections.educational, "educational")
+  );
+}
+
+if (categorySections.workshop.form) {
+  categorySections.workshop.form.addEventListener(
+    "submit",
+    handleUpload(categorySections.workshop, "workshop")
+  );
+}
 
 loadVideos();
