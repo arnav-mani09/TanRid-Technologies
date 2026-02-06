@@ -12,7 +12,11 @@ export type UserRecord = {
   created_at?: string;
 };
 
-const dataDir = path.join(process.cwd(), "data");
+const dataDir =
+  process.env.DATA_DIR ||
+  (process.env.NODE_ENV === "production"
+    ? "/tmp/tanrid-data"
+    : path.join(process.cwd(), "data"));
 const usersFile = path.join(dataDir, "users.json");
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
