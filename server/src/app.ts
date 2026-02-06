@@ -40,6 +40,15 @@ app.use(
       if (origin && origin.endsWith(".vercel.app")) {
         return callback(null, true);
       }
+      if (origin) {
+        try {
+          if (/(^|\\.)tanrid\\.com$/.test(new URL(origin).hostname)) {
+            return callback(null, true);
+          }
+        } catch (error) {
+          return callback(new Error("Not allowed by CORS"));
+        }
+      }
       if (!origin || allowedOriginSet.has(origin)) {
         return callback(null, true);
       }
