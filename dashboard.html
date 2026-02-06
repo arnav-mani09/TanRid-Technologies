@@ -14,7 +14,10 @@
     </div>
     <nav class="dash-nav">
       <button class="nav-tab active" data-panel="overview">Overview</button>
+      <button class="nav-tab" data-panel="courses">My Courses</button>
+      <button class="nav-tab" data-panel="my-videos">My Videos</button>
       <button class="nav-tab" data-panel="chatbot">AI Assistant</button>
+      <button class="nav-tab" data-panel="templates">Templates</button>
       <button class="nav-tab" data-panel="billing">Billing</button>
     </nav>
     <button id="logout-btn" class="btn ghost">Sign out</button>
@@ -98,10 +101,6 @@
         <h2>Video library</h2>
         <p>Browse TanRid training in educational and workshop formats.</p>
       </div>
-      <div class="instructor-note section-block" id="instructor-note">
-        <h3>Instructor uploads</h3>
-        <p>Course publishing is managed by TanRid instructors. Reach out if you need access.</p>
-      </div>
       <div class="video-library">
         <div class="library-section">
           <div class="library-header">
@@ -109,31 +108,6 @@
               <h3>Educational</h3>
               <p>Deep dives for structured learning paths.</p>
             </div>
-            <button class="btn ghost upload-toggle" data-target="edu-upload-section" hidden>
-              Upload educational
-            </button>
-          </div>
-          <div class="video-upload-card" id="edu-upload-section" hidden>
-            <h4>Upload educational module</h4>
-            <form id="edu-upload-form">
-              <label>
-                Title
-                <input type="text" name="video-title" placeholder="Automation Playbook" required />
-              </label>
-              <label>
-                Caption
-                <textarea name="video-caption" rows="2" placeholder="Describe what’s inside..."></textarea>
-              </label>
-              <label class="file-picker">
-                Video file
-                <input type="file" id="edu-video-file" accept="video/*" required />
-              </label>
-              <div class="video-preview" id="edu-video-preview" hidden>
-                <video id="edu-video-preview-player" controls preload="metadata"></video>
-                <p class="preview-note">Preview of the selected file.</p>
-              </div>
-              <button type="submit" class="btn primary">Upload educational</button>
-            </form>
           </div>
           <div class="video-gallery" id="edu-video-grid">
             <p class="empty-state" id="edu-video-empty">Educational videos will appear here once published.</p>
@@ -145,31 +119,6 @@
               <h3>Workshops</h3>
               <p>Hands-on sessions and live enablement.</p>
             </div>
-            <button class="btn ghost upload-toggle" data-target="workshop-upload-section" hidden>
-              Upload workshop
-            </button>
-          </div>
-          <div class="video-upload-card" id="workshop-upload-section" hidden>
-            <h4>Upload workshop module</h4>
-            <form id="workshop-upload-form">
-              <label>
-                Title
-                <input type="text" name="video-title" placeholder="Workshop: QA Clinics" required />
-              </label>
-              <label>
-                Caption
-                <textarea name="video-caption" rows="2" placeholder="Describe what’s inside..."></textarea>
-              </label>
-              <label class="file-picker">
-                Video file
-                <input type="file" id="workshop-video-file" accept="video/*" required />
-              </label>
-              <div class="video-preview" id="workshop-video-preview" hidden>
-                <video id="workshop-video-preview-player" controls preload="metadata"></video>
-                <p class="preview-note">Preview of the selected file.</p>
-              </div>
-              <button type="submit" class="btn primary">Upload workshop</button>
-            </form>
           </div>
           <div class="video-gallery" id="workshop-video-grid">
             <p class="empty-state" id="workshop-video-empty">Workshop videos will appear here once published.</p>
@@ -177,30 +126,204 @@
         </div>
       </div>
 
+    </section>
+
+    <section id="courses" class="panel">
+      <div class="section-heading">
+        <h2>Current courses</h2>
+        <p>Your active learning paths, next lessons, and momentum.</p>
+      </div>
+      <div class="course-track-grid">
+        <article class="course-track">
+          <div class="course-track-header">
+            <div>
+              <h3>Automation Playbook</h3>
+              <p>Reusable testing frameworks for stable releases.</p>
+            </div>
+            <span class="course-status">In progress</span>
+          </div>
+          <div class="course-progress">
+            <div class="progress-bar">
+              <span class="progress-fill" style="width: 42%;"></span>
+            </div>
+            <span class="progress-label">42% complete</span>
+          </div>
+          <div class="course-next">
+            <span class="next-label">Next lesson</span>
+            <span class="next-title">Module 4: Building resilient suites</span>
+          </div>
+          <div class="course-actions">
+            <button class="btn primary">Resume</button>
+            <button class="btn ghost">View syllabus</button>
+          </div>
+        </article>
+        <article class="course-track">
+          <div class="course-track-header">
+            <div>
+              <h3>Platform Reliability</h3>
+              <p>SLIs, SLOs, and response strategy for scale.</p>
+            </div>
+            <span class="course-status">In progress</span>
+          </div>
+          <div class="course-progress">
+            <div class="progress-bar">
+              <span class="progress-fill" style="width: 68%;"></span>
+            </div>
+            <span class="progress-label">68% complete</span>
+          </div>
+          <div class="course-next">
+            <span class="next-label">Next lesson</span>
+            <span class="next-title">Lesson 6: Incident postmortems</span>
+          </div>
+          <div class="course-actions">
+            <button class="btn primary">Resume</button>
+            <button class="btn ghost">View syllabus</button>
+          </div>
+        </article>
+        <article class="course-track">
+          <div class="course-track-header">
+            <div>
+              <h3>Product Leadership</h3>
+              <p>Decision frameworks for cross-functional teams.</p>
+            </div>
+            <span class="course-status">Saved</span>
+          </div>
+          <div class="course-progress">
+            <div class="progress-bar">
+              <span class="progress-fill" style="width: 15%;"></span>
+            </div>
+            <span class="progress-label">15% complete</span>
+          </div>
+          <div class="course-next">
+            <span class="next-label">Next lesson</span>
+            <span class="next-title">Module 2: Aligning stakeholders</span>
+          </div>
+          <div class="course-actions">
+            <button class="btn primary">Resume</button>
+            <button class="btn ghost">View syllabus</button>
+          </div>
+        </article>
+      </div>
       <div class="section-heading section-block">
-        <h2>Resume templates</h2>
-        <p>Download and customize templates built for TanRid candidates.</p>
+        <h2>Keep your streak alive</h2>
+        <p>Small wins add up. Pick one lesson to complete today.</p>
       </div>
-      <div class="template-header">
-        <p class="template-note">Templates will be added soon.</p>
-        <button class="btn ghost" type="button" disabled>Upload templates</button>
+      <div class="course-streak">
+        <div>
+          <h3>Weekly learning target</h3>
+          <p>3 of 5 sessions completed this week.</p>
+          <div class="progress-bar compact">
+            <span class="progress-fill" style="width: 60%;"></span>
+          </div>
+        </div>
+        <button class="btn ghost">Schedule sessions</button>
       </div>
-      <div class="template-grid">
-        <article class="template-card">
-          <h4>Software QA resume</h4>
-          <p>Clean, ATS-ready layout with impact metrics.</p>
-          <span class="template-tag">Coming soon</span>
-        </article>
-        <article class="template-card">
-          <h4>Business analyst resume</h4>
-          <p>Highlights research, synthesis, and stakeholder alignment.</p>
-          <span class="template-tag">Coming soon</span>
-        </article>
-        <article class="template-card">
-          <h4>Automation engineer resume</h4>
-          <p>Focus on frameworks, CI/CD, and reliability wins.</p>
-          <span class="template-tag">Coming soon</span>
-        </article>
+    </section>
+
+    <section id="my-videos" class="panel">
+      <div class="video-market-header">
+        <div class="video-market-brand">
+          <span class="logo-wordmark">TanRid</span>
+          <span class="brand-subtitle">Courses</span>
+        </div>
+        <div class="video-market-search">
+          <input
+            type="search"
+            id="my-video-search"
+            placeholder="Search your videos"
+            aria-label="Search videos"
+          />
+        </div>
+        <div class="video-market-links">
+          <a href="#" class="market-link">Plans &amp; Pricing</a>
+          <a href="#" class="market-link">TanRid Business</a>
+          <a href="#" class="market-link">Teach on TanRid</a>
+          <button class="cart-btn" type="button" aria-label="Cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M6 6h15l-2 9H8L6 6zm0 0L5 3H2m6 18a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="my-video-grid" id="my-video-grid">
+        <p class="empty-state" id="my-video-empty">Start a video to see it here.</p>
+      </div>
+      <div class="section-heading section-block">
+        <h2>Upload new modules</h2>
+        <p>Instructor-only uploads for new educational or workshop content.</p>
+      </div>
+      <div class="instructor-note section-block" id="instructor-note">
+        <h3>Instructor uploads</h3>
+        <p>Course publishing is managed by TanRid instructors. Reach out if you need access.</p>
+      </div>
+      <div class="video-upload-grid">
+        <div class="video-upload-card" id="edu-upload-section" hidden>
+          <div class="upload-header">
+            <div>
+              <h4>Educational modules</h4>
+              <p>Upload deep-dive lessons for the core library.</p>
+            </div>
+            <button class="btn ghost upload-toggle" data-target="edu-upload-section" hidden>
+              Toggle upload
+            </button>
+          </div>
+          <form id="edu-upload-form">
+            <label>
+              Title
+              <input type="text" name="video-title" placeholder="Automation Playbook" required />
+            </label>
+            <label>
+              Caption
+              <textarea name="video-caption" rows="2" placeholder="Describe what’s inside..."></textarea>
+            </label>
+            <label class="file-picker">
+              Video file
+              <input type="file" id="edu-video-file" accept="video/*" required />
+            </label>
+            <div class="video-preview" id="edu-video-preview" hidden>
+              <video id="edu-video-preview-player" controls preload="metadata"></video>
+              <p class="preview-note">Preview of the selected file.</p>
+            </div>
+            <button type="submit" class="btn primary">Upload educational</button>
+          </form>
+        </div>
+        <div class="video-upload-card" id="workshop-upload-section" hidden>
+          <div class="upload-header">
+            <div>
+              <h4>Workshop sessions</h4>
+              <p>Upload live sessions and hands-on recordings.</p>
+            </div>
+            <button class="btn ghost upload-toggle" data-target="workshop-upload-section" hidden>
+              Toggle upload
+            </button>
+          </div>
+          <form id="workshop-upload-form">
+            <label>
+              Title
+              <input type="text" name="video-title" placeholder="Workshop: QA Clinics" required />
+            </label>
+            <label>
+              Caption
+              <textarea name="video-caption" rows="2" placeholder="Describe what’s inside..."></textarea>
+            </label>
+            <label class="file-picker">
+              Video file
+              <input type="file" id="workshop-video-file" accept="video/*" required />
+            </label>
+            <div class="video-preview" id="workshop-video-preview" hidden>
+              <video id="workshop-video-preview-player" controls preload="metadata"></video>
+              <p class="preview-note">Preview of the selected file.</p>
+            </div>
+            <button type="submit" class="btn primary">Upload workshop</button>
+          </form>
+        </div>
       </div>
     </section>
 
@@ -252,6 +375,34 @@
             <li>24/7 on-call support</li>
           </ul>
           <button class="btn ghost" data-select-plan="enterprise">Contact sales</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="templates" class="panel">
+      <div class="section-heading">
+        <h2>Resume templates</h2>
+        <p>Download and customize templates built for TanRid candidates.</p>
+      </div>
+      <div class="template-header">
+        <p class="template-note">Templates will be added soon.</p>
+        <button class="btn ghost" type="button" disabled>Upload templates</button>
+      </div>
+      <div class="template-grid">
+        <article class="template-card">
+          <h4>Software QA resume</h4>
+          <p>Clean, ATS-ready layout with impact metrics.</p>
+          <span class="template-tag">Coming soon</span>
+        </article>
+        <article class="template-card">
+          <h4>Business analyst resume</h4>
+          <p>Highlights research, synthesis, and stakeholder alignment.</p>
+          <span class="template-tag">Coming soon</span>
+        </article>
+        <article class="template-card">
+          <h4>Automation engineer resume</h4>
+          <p>Focus on frameworks, CI/CD, and reliability wins.</p>
+          <span class="template-tag">Coming soon</span>
         </article>
       </div>
     </section>

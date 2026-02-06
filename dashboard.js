@@ -1,6 +1,7 @@
 const API_BASE = window.TANRID_API || "https://tanrid-technologies.onrender.com";
 const TOKEN_KEY = "tanrid_token";
 const USER_KEY = "tanrid_user";
+const VIDEO_PROGRESS_KEY = "tanrid_video_progress";
 
 const toast = document.getElementById("dash-toast");
 const showToast = message => {
@@ -147,6 +148,185 @@ uploadToggles.forEach(button => {
 const resolveVideoUrl = url =>
   url && url.startsWith("http") ? url : `${API_BASE}${url || ""}`;
 
+const loadVideoProgress = () => {
+  try {
+    const raw = localStorage.getItem(VIDEO_PROGRESS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (error) {
+    return {};
+  }
+};
+
+const saveVideoProgress = progressMap => {
+  localStorage.setItem(VIDEO_PROGRESS_KEY, JSON.stringify(progressMap));
+};
+
+const updateVideoProgress = (videoId, currentTime, duration) => {
+  if (!videoId || !Number.isFinite(currentTime) || !Number.isFinite(duration)) {
+    return;
+  }
+  const progressMap = loadVideoProgress();
+  progressMap[videoId] = {
+    currentTime,
+    duration,
+    updatedAt: Date.now(),
+  };
+  saveVideoProgress(progressMap);
+};
+
+const myVideoGrid = document.getElementById("my-video-grid");
+const myVideoEmpty = document.getElementById("my-video-empty");
+const myVideoSearch = document.getElementById("my-video-search");
+let allVideosCache = [];
+
+const attachVideoTracking = (videoEl, videoId) => {
+  if (!(videoEl instanceof HTMLVideoElement) || !videoId) return;
+
+  const handleTimeUpdate = () => {
+    const now = Math.floor(videoEl.currentTime);
+    const lastSaved = Number(videoEl.dataset.lastSaved || "0");
+    if (now - lastSaved < 5) return;
+    videoEl.dataset.lastSaved = String(now);
+    updateVideoProgress(videoId, videoEl.currentTime, videoEl.duration || 0);
+  };
+
+  const handleLoaded = () => {
+    updateVideoProgress(videoId, videoEl.currentTime, videoEl.duration || 0);
+  };
+
+  const handleEnded = () => {
+    updateVideoProgress(videoId, videoEl.duration || 0, videoEl.duration || 0);
+  };
+
+  const playPreview = () => {
+    if (videoEl.readyState < 2) return;
+    videoEl.muted = true;
+    videoEl.play().catch(() => {});
+  };
+
+  const stopPreview = () => {
+    if (!videoEl.paused) {
+      videoEl.pause();
+    }
+  };
+
+  videoEl.addEventListener("timeupdate", handleTimeUpdate);
+  videoEl.addEventListener("loadedmetadata", handleLoaded);
+  videoEl.addEventListener("ended", handleEnded);
+  videoEl.addEventListener("mouseenter", playPreview);
+  videoEl.addEventListener("mouseleave", stopPreview);
+  videoEl.addEventListener("focus", playPreview);
+  videoEl.addEventListener("blur", stopPreview);
+};
+
+const renderMyVideos = videos => {
+  if (!myVideoGrid || !myVideoEmpty) return;
+  allVideosCache = videos;
+  const progressMap = loadVideoProgress();
+  const query = (myVideoSearch?.value || "").trim().toLowerCase();
+  const filtered = videos.filter(video => {
+    if (!query) return true;
+    const title = (video.title || "").toLowerCase();
+    const caption = (video.caption || "").toLowerCase();
+    return title.includes(query) || caption.includes(query);
+  });
+
+  myVideoGrid.innerHTML = "";
+  if (!filtered.length) {
+    myVideoEmpty.hidden = false;
+    myVideoGrid.appendChild(myVideoEmpty);
+    return;
+  }
+  myVideoEmpty.hidden = true;
+  filtered.forEach(video => {
+    const card = document.createElement("article");
+    card.className = "my-video-card";
+    const progress = progressMap[video.id];
+    const percent = progress?.duration
+      ? Math.min(
+          100,
+          Math.max(
+            0,
+            Math.round((progress.currentTime / progress.duration) * 100)
+          )
+        )
+      : 0;
+    const minutesLeft = progress?.duration
+      ? Math.max(0, Math.ceil((progress.duration - progress.currentTime) / 60))
+      : null;
+    const statusLabel = percent > 0 && percent < 100 ? "In progress" : "New";
+    card.innerHTML = `
+      <video data-video-id="${video.id}" controls preload="metadata" src="${resolveVideoUrl(
+        video.videoUrl
+      )}"></video>
+      <div>
+        <h3>${video.title}</h3>
+        ${video.caption ? `<p>${video.caption}</p>` : ""}
+      </div>
+      <div class="my-video-badges">
+        <span class="my-video-badge">${statusLabel}</span>
+        <span class="my-video-badge">${video.category || "Lesson"}</span>
+      </div>
+      <div class="course-progress">
+        <div class="progress-bar">
+          <span class="progress-fill" style="width: ${percent}%;"></span>
+        </div>
+        <div class="my-video-meta">
+          <span>${percent}% complete</span>
+          <span>${minutesLeft !== null ? `${minutesLeft} min left` : "Not started"}</span>
+        </div>
+      </div>
+      <div class="my-video-actions">
+        <button class="btn primary" data-resume-video="${video.id}">${
+          percent > 0 && percent < 100 ? "Resume" : "Start"
+        }</button>
+        <button class="btn ghost" data-open-library="${video.id}">View in library</button>
+      </div>
+    `;
+    myVideoGrid.appendChild(card);
+    const player = card.querySelector("video");
+    if (player instanceof HTMLVideoElement) {
+      attachVideoTracking(player, video.id);
+    }
+  });
+};
+
+const handleResume = event => {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) return;
+  const resumeId =
+    target.getAttribute("data-resume-video") ||
+    target.getAttribute("data-open-library");
+  if (!resumeId) return;
+  const localCard = target.closest(".my-video-card");
+  if (localCard && target.getAttribute("data-resume-video")) {
+    const player = localCard.querySelector("video");
+    if (player instanceof HTMLVideoElement) {
+      player.play().catch(() => {});
+      player.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+  }
+  const overviewTab = document.querySelector(".nav-tab[data-panel='overview']");
+  if (overviewTab instanceof HTMLButtonElement) {
+    overviewTab.click();
+  }
+  const videoCard = document.querySelector(
+    `.video-card[data-video-id="${resumeId}"]`
+  );
+  if (!videoCard) return;
+  videoCard.scrollIntoView({ behavior: "smooth", block: "center" });
+  if (target.getAttribute("data-resume-video")) {
+    const player = videoCard.querySelector("video");
+    if (player instanceof HTMLVideoElement) {
+      player.play().catch(() => {});
+    }
+  }
+};
+
+myVideoGrid?.addEventListener("click", handleResume);
+myVideoSearch?.addEventListener("input", () => renderMyVideos(allVideosCache));
+
 const clearPreview = section => {
   if (section.previewPlayer instanceof HTMLVideoElement) {
     section.previewPlayer.removeAttribute("src");
@@ -193,17 +373,27 @@ const renderVideos = (videos, section, label) => {
   videos.forEach(video => {
     const card = document.createElement("article");
     card.className = "video-card";
+    card.dataset.videoId = video.id;
     const deleteButton = isInstructor
       ? `<button class="delete-video" type="button" data-video-id="${video.id}">Delete</button>`
       : "";
     card.innerHTML = `
-      <video controls preload="metadata" src="${resolveVideoUrl(video.videoUrl)}"></video>
+      <video data-video-id="${video.id}" controls preload="metadata" src="${resolveVideoUrl(
+        video.videoUrl
+      )}"></video>
       <h4>${video.title}</h4>
       ${video.caption ? `<p>${video.caption}</p>` : ""}
       <span class="meta">${label} · ${new Date(video.createdAt).toLocaleString()}</span>
       ${deleteButton}
     `;
     section.grid.appendChild(card);
+  });
+
+  section.grid.querySelectorAll("video[data-video-id]").forEach(videoEl => {
+    if (!(videoEl instanceof HTMLVideoElement)) return;
+    const videoId = videoEl.dataset.videoId;
+    if (!videoId) return;
+    attachVideoTracking(videoEl, videoId);
   });
 };
 
@@ -221,6 +411,7 @@ const loadVideos = async () => {
     const workshops = videos.filter(video => video.category === "workshop");
     renderVideos(educational, categorySections.educational, "Educational");
     renderVideos(workshops, categorySections.workshop, "Workshop");
+    renderMyVideos(videos);
   } catch (error) {
     Object.values(categorySections).forEach(section => {
       if (!section.empty) return;
