@@ -13,13 +13,25 @@ const showToast = message => {
 
 const tabs = document.querySelectorAll(".nav-tab");
 const panels = document.querySelectorAll(".panel");
+const setActivePanel = panelId => {
+  if (!panelId) return;
+  tabs.forEach(item => item.classList.toggle("active", item.dataset.panel === panelId));
+  panels.forEach(panel => {
+    panel.classList.toggle("active", panel.id === panelId);
+  });
+};
+
 tabs.forEach(tab => {
   tab.addEventListener("click", () => {
-    tabs.forEach(item => item.classList.remove("active"));
-    tab.classList.add("active");
-    panels.forEach(panel => {
-      panel.classList.toggle("active", panel.id === tab.dataset.panel);
-    });
+    setActivePanel(tab.dataset.panel || "");
+  });
+});
+
+document.querySelectorAll("[data-panel-target]").forEach(target => {
+  target.addEventListener("click", () => {
+    const panelId = target.getAttribute("data-panel-target");
+    if (!panelId) return;
+    setActivePanel(panelId);
   });
 });
 

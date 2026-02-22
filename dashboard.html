@@ -14,8 +14,7 @@
     </div>
     <nav class="dash-nav">
       <button class="nav-tab active" data-panel="overview">Overview</button>
-      <button class="nav-tab" data-panel="courses">My Courses</button>
-      <button class="nav-tab" data-panel="my-videos">My Videos</button>
+      <button class="nav-tab" data-panel="my-videos">My Courses</button>
       <button class="nav-tab" data-panel="chatbot">AI Assistant</button>
       <button class="nav-tab" data-panel="templates">Templates</button>
       <button class="nav-tab" data-panel="billing">Billing</button>
@@ -57,71 +56,61 @@
       </div>
 
       <div class="section-heading section-block">
-        <h2>Your courses</h2>
-        <p>Resume what you’re working on and stay on track.</p>
+        <h2>Courses Progress</h2>
+        <p>Track where each active course stands and what to resume next.</p>
       </div>
       <div class="course-grid">
         <article class="course-card">
-          <h3>Automation Playbook</h3>
+          <div class="course-card-thumb module-thumb-1" aria-hidden="true"></div>
+          <h3>Java Basics for Beginners</h3>
           <p>Reusable testing frameworks for stable releases.</p>
           <span class="course-meta">42% complete</span>
         </article>
         <article class="course-card">
-          <h3>Platform Reliability</h3>
+          <div class="course-card-thumb module-thumb-2" aria-hidden="true"></div>
+          <h3>Mastering Java Methods</h3>
           <p>SLIs, SLOs, and response strategy for scale.</p>
           <span class="course-meta">In progress</span>
         </article>
-        <article class="course-card">
-          <h3>Product Leadership</h3>
-          <p>Decision frameworks for cross-functional teams.</p>
-          <span class="course-meta">Saved for later</span>
-        </article>
       </div>
 
       <div class="section-heading section-block">
-        <h2>Explore courses</h2>
-        <p>Find new training paths curated for TanRid clients.</p>
-      </div>
-      <div class="explore-grid">
-        <article class="explore-card">
-          <h4>Mobile QA Mastery</h4>
-          <p>Device labs, automation, and release strategy.</p>
-        </article>
-        <article class="explore-card">
-          <h4>AI Quality Ops</h4>
-          <p>Guardrails, evaluation, and test automation.</p>
-        </article>
-        <article class="explore-card">
-          <h4>Performance Readiness</h4>
-          <p>Load testing, tuning plans, and health dashboards.</p>
-        </article>
-      </div>
-
-      <div class="section-heading section-block">
-        <h2>Video library</h2>
-        <p>Browse TanRid training in educational and workshop formats.</p>
+        <h2>Learning modules</h2>
+        <p>Browse premium TanRid modules in one streamlined library.</p>
       </div>
       <div class="video-library">
         <div class="library-section">
           <div class="library-header">
             <div>
-              <h3>Educational</h3>
-              <p>Deep dives for structured learning paths.</p>
+              <h3>Learing module library preview</h3>
+              <p>Structured tracks across QA, automation, and reliability.</p>
             </div>
           </div>
-          <div class="video-gallery" id="edu-video-grid">
-            <p class="empty-state" id="edu-video-empty">Educational videos will appear here once published.</p>
-          </div>
-        </div>
-        <div class="library-section">
-          <div class="library-header">
-            <div>
-              <h3>Workshops</h3>
-              <p>Hands-on sessions and live enablement.</p>
+          <div class="library-preview-wrap">
+            <div class="locked-gallery">
+              <article class="locked-course-card">
+                <div class="locked-thumb module-thumb-3">
+                  <span class="lock-badge" aria-hidden="true"></span>
+                </div>
+                <h4>Java Basics for Beginners</h4>
+                <button class="locked-billing-link" type="button" data-panel-target="billing">Go to Billing</button>
+              </article>
+              <article class="locked-course-card">
+                <div class="locked-thumb module-thumb-4">
+                  <span class="lock-badge" aria-hidden="true"></span>
+                </div>
+                <h4>Object-Oriented Programming (OOP)</h4>
+                <button class="locked-billing-link" type="button" data-panel-target="billing">Go to Billing</button>
+              </article>
+              <article class="locked-course-card">
+                <div class="locked-thumb module-thumb-5">
+                  <span class="lock-badge" aria-hidden="true"></span>
+                </div>
+                <h4>Mastering Java Methods</h4>
+                <button class="locked-billing-link" type="button" data-panel-target="billing">Go to Billing</button>
+              </article>
             </div>
-          </div>
-          <div class="video-gallery" id="workshop-video-grid">
-            <p class="empty-state" id="workshop-video-empty">Workshop videos will appear here once published.</p>
+            <button class="full-library-rail" type="button" data-panel-target="my-videos">See full library</button>
           </div>
         </div>
       </div>
@@ -255,76 +244,6 @@
       <div class="my-video-grid" id="my-video-grid">
         <p class="empty-state" id="my-video-empty">Start a video to see it here.</p>
       </div>
-      <div class="section-heading section-block">
-        <h2>Upload new modules</h2>
-        <p>Instructor-only uploads for new educational or workshop content.</p>
-      </div>
-      <div class="instructor-note section-block" id="instructor-note">
-        <h3>Instructor uploads</h3>
-        <p>Course publishing is managed by TanRid instructors. Reach out if you need access.</p>
-      </div>
-      <div class="video-upload-grid">
-        <div class="video-upload-card" id="edu-upload-section" hidden>
-          <div class="upload-header">
-            <div>
-              <h4>Educational modules</h4>
-              <p>Upload deep-dive lessons for the core library.</p>
-            </div>
-            <button class="btn ghost upload-toggle" data-target="edu-upload-section" hidden>
-              Toggle upload
-            </button>
-          </div>
-          <form id="edu-upload-form">
-            <label>
-              Title
-              <input type="text" name="video-title" placeholder="Automation Playbook" required />
-            </label>
-            <label>
-              Caption
-              <textarea name="video-caption" rows="2" placeholder="Describe what’s inside..."></textarea>
-            </label>
-            <label class="file-picker">
-              Video file
-              <input type="file" id="edu-video-file" accept="video/*" required />
-            </label>
-            <div class="video-preview" id="edu-video-preview" hidden>
-              <video id="edu-video-preview-player" controls preload="metadata"></video>
-              <p class="preview-note">Preview of the selected file.</p>
-            </div>
-            <button type="submit" class="btn primary">Upload educational</button>
-          </form>
-        </div>
-        <div class="video-upload-card" id="workshop-upload-section" hidden>
-          <div class="upload-header">
-            <div>
-              <h4>Workshop sessions</h4>
-              <p>Upload live sessions and hands-on recordings.</p>
-            </div>
-            <button class="btn ghost upload-toggle" data-target="workshop-upload-section" hidden>
-              Toggle upload
-            </button>
-          </div>
-          <form id="workshop-upload-form">
-            <label>
-              Title
-              <input type="text" name="video-title" placeholder="Workshop: QA Clinics" required />
-            </label>
-            <label>
-              Caption
-              <textarea name="video-caption" rows="2" placeholder="Describe what’s inside..."></textarea>
-            </label>
-            <label class="file-picker">
-              Video file
-              <input type="file" id="workshop-video-file" accept="video/*" required />
-            </label>
-            <div class="video-preview" id="workshop-video-preview" hidden>
-              <video id="workshop-video-preview-player" controls preload="metadata"></video>
-              <p class="preview-note">Preview of the selected file.</p>
-            </div>
-            <button type="submit" class="btn primary">Upload workshop</button>
-          </form>
-        </div>
-      </div>
     </section>
 
     <section id="chatbot" class="panel">
@@ -344,38 +263,49 @@
     </section>
 
     <section id="billing" class="panel">
-      <div class="plan-grid">
-        <article class="plan-card" data-plan="free">
-          <span class="plan-label">Starter</span>
-          <h3>Free</h3>
-          <ul>
-            <li>Community TanBot access</li>
-            <li>Monthly release notes</li>
-            <li>Email support (48h)</li>
-          </ul>
-          <button class="btn ghost" data-select-plan="free">Stay on Free</button>
-        </article>
-        <article class="plan-card highlight" data-plan="pro">
-          <span class="plan-label">Recommended</span>
-          <h3>TanRid Pro</h3>
-          <p class="price">$79<span>/mo</span></p>
-          <ul>
-            <li>Unlimited TanBot chats</li>
-            <li>Solution playbooks</li>
-            <li>Live office hours</li>
-          </ul>
-          <button class="btn primary" data-select-plan="pro">Unlock Pro</button>
-        </article>
-        <article class="plan-card" data-plan="enterprise">
-          <span class="plan-label">Enterprise</span>
-          <h3>Custom</h3>
-          <ul>
-            <li>Embedded pods</li>
-            <li>Compliance reviews</li>
-            <li>24/7 on-call support</li>
-          </ul>
-          <button class="btn ghost" data-select-plan="enterprise">Contact sales</button>
-        </article>
+      <div class="billing-shell">
+        <div class="billing-topline">
+          <span class="billing-brand">TanRid</span>
+          <span class="billing-rule" aria-hidden="true"></span>
+        </div>
+        <h2 class="billing-title">Pathway Program</h2>
+        <div class="billing-journey">
+          <article class="path-card launch" data-plan="free">
+            <h3 class="path-step">Launch</h3>
+            <div class="path-head">Get Started</div>
+            <div class="path-price">Free</div>
+            <ul>
+              <li>Resume AI</li>
+              <li>Core Modules</li>
+              <li>Self-Serve</li>
+            </ul>
+            <button class="btn ghost" data-select-plan="free">Stay on Free</button>
+          </article>
+          <div class="path-arrow" aria-hidden="true">➜</div>
+          <article class="path-card elevate" data-plan="pro">
+            <h3 class="path-step">Elevate</h3>
+            <div class="path-head">Build Momentum</div>
+            <div class="path-price">$10/month</div>
+            <ul>
+              <li>Resume AI+</li>
+              <li>Feedback Loops</li>
+              <li>Progress Checks</li>
+            </ul>
+            <button class="btn primary" data-select-plan="pro">Unlock Growth</button>
+          </article>
+          <div class="path-arrow" aria-hidden="true">➜</div>
+          <article class="path-card thrive" data-plan="enterprise">
+            <h3 class="path-step">Thrive</h3>
+            <div class="path-head">Sustain Growth</div>
+            <div class="path-price">$25/month</div>
+            <ul>
+              <li>Advanced Workshops</li>
+              <li>1-on-1 Coaching</li>
+              <li>Career Scaling</li>
+            </ul>
+            <button class="btn ghost" data-select-plan="enterprise">Contact Sales</button>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -385,24 +315,30 @@
         <p>Download and customize templates built for TanRid candidates.</p>
       </div>
       <div class="template-header">
-        <p class="template-note">Templates will be added soon.</p>
-        <button class="btn ghost" type="button" disabled>Upload templates</button>
+        <p class="template-note">Pick a template and customize it for your next application.</p>
       </div>
       <div class="template-grid">
         <article class="template-card">
+          <img class="template-preview" src="assets/templates/template1.png" alt="Resume template 1 preview" />
           <h4>Software QA resume</h4>
           <p>Clean, ATS-ready layout with impact metrics.</p>
-          <span class="template-tag">Coming soon</span>
+          <span class="template-tag">Template 1</span>
+          <button class="template-download" type="button" aria-label="Download template 1">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 4v10m0 0l-4-4m4 4l4-4M5 18h14" />
+            </svg>
+          </button>
         </article>
         <article class="template-card">
+          <img class="template-preview" src="assets/templates/template2.png" alt="Resume template 2 preview" />
           <h4>Business analyst resume</h4>
           <p>Highlights research, synthesis, and stakeholder alignment.</p>
-          <span class="template-tag">Coming soon</span>
-        </article>
-        <article class="template-card">
-          <h4>Automation engineer resume</h4>
-          <p>Focus on frameworks, CI/CD, and reliability wins.</p>
-          <span class="template-tag">Coming soon</span>
+          <span class="template-tag">Template 2</span>
+          <button class="template-download" type="button" aria-label="Download template 2">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 4v10m0 0l-4-4m4 4l4-4M5 18h14" />
+            </svg>
+          </button>
         </article>
       </div>
     </section>
